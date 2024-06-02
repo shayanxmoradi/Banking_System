@@ -1,6 +1,10 @@
 package util;
 
 import config.DataSource;
+import repository.UserRepo;
+import repository.UserRepoImpl;
+import service.UserService;
+import service.UserServiceImpl;
 
 import java.sql.Connection;
 
@@ -8,6 +12,7 @@ public class ApplicationContext {
     private static final ApplicationContext INSTANCE=new ApplicationContext();
    // private static final   UserService userService;
    // private static final TweetService tweetService;
+    private static final UserService userService;
 
     private ApplicationContext() {
     }
@@ -15,7 +20,11 @@ public class ApplicationContext {
         return INSTANCE;
     }
     static {
-    //    Connection connection = DataSource.getConnection();
+   Connection connection = DataSource.getConnection();
+   UserRepo userRepo = new UserRepoImpl(connection);
+
+
+userService = new UserServiceImpl(userRepo);
 
        // UserRepository userRepository=new UserRepositoryImpl(connection);
       //  TweetRepository tweetRepository=new TweetRepositoryImpl(connection);
