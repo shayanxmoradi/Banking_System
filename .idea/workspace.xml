@@ -5,16 +5,53 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1840caca-3861-49d1-8977-2b69e567f07e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/Account.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/Bank.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/BaseEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/CreditCard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/transaction/BatchPayaTransaction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/transaction/CardTransaction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/transaction/PayaTransaction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/transaction/SatnaTransaction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/transaction/Transaction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/transaction/enums/TransactionStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/entity/transaction/enums/TransactionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/menu/MainMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/menu/SignUpMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/menu/util/Input.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/menu/util/LoginMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/menu/util/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BankingApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BankingApplication.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "shayanxmoradi"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/shayanxmoradi/Banking_System.git",
+    "accountId": "29155c84-d287-4e2a-872a-4eddfa71e379"
+  }
+}]]></component>
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 5
 }]]></component>
@@ -26,14 +63,46 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.BankingApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "onboarding.tips.debug.path": "/Users/shayan/Desktop/JAVA /projects/HW/HW8/Banking_System/src/main/java/org/example/Main.java",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="menu.util" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="BankingApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="BankingApplication" />
+      <module name="Banking_System" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.BankingApplication" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -50,7 +119,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1717306945385</updated>
-      <workItem from="1717306946399" duration="1000" />
+      <workItem from="1717306946399" duration="3733000" />
     </task>
     <servers />
   </component>
@@ -61,8 +130,8 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>13</line>
+          <url>file://$PROJECT_DIR$/src/main/java/BankingApplication.java</url>
+          <line>7</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
