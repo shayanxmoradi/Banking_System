@@ -1,11 +1,12 @@
 package menu;
 
 import menu.util.Input;
-import menu.util.LoginMenu;
 import menu.util.Message;
 
+import java.sql.SQLException;
+
 public class MainMenu {
-    public static void show() {
+    public static void show() throws SQLException {
         meinMenu:
         while (true) {
             System.out.println(Message.getMenuName("mainMenu"));

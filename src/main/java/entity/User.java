@@ -24,4 +24,8 @@ public class User extends BaseEntity {
     public String getUsername() {
         return username;
     }
+
+    public String getPassword() {
+        return password;
+    }
 }
