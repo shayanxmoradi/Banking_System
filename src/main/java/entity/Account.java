@@ -8,8 +8,8 @@ public class Account extends BaseEntity {
     private Long BankId;
     private Double balance;
 
-    public Account(Long id, String accountName, String accountNummber, Long userId, Long bankId, Double balance,String payaNummber) {
-        super(id);
+    public Account( String accountName, String accountNummber, Long userId, Long bankId, Double balance,String payaNummber) {
+
         this.accountName = accountName;
         this.accountNummber = accountNummber;
         this.userId = userId;

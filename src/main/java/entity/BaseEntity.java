@@ -3,7 +3,7 @@ package entity;
 public abstract class BaseEntity {
     private Long id;
 
-    public BaseEntity(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

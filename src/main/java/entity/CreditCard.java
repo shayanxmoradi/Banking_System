@@ -10,8 +10,8 @@ public class CreditCard extends BaseEntity {
     private Long accountId;
     private boolean isActive = true;
 
-    public CreditCard(Long id, String cardNumber, Date expiryDate, String cvv, double balance, Long accountId, boolean isActive) {
-        super(id);
+    public CreditCard( String cardNumber, Date expiryDate, String cvv, double balance, Long accountId, boolean isActive) {
+
         this.cardNumber = cardNumber;
         this.expiryDate = expiryDate;
         this.cvv = cvv;
