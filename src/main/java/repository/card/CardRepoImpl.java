@@ -1,4 +1,4 @@
 package repository.card;
 
-public class CardRepoImpl {
+public class CardRepoImpl implements CardRepo{
 }

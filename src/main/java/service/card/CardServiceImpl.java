@@ -1,4 +1,4 @@
 package service.card;
 
-public class CardServiceImpl {
+public class CardServiceImpl implements CardService {
 }

@@ -22,4 +22,5 @@ public abstract class Transaction extends BaseEntity {
         this.transactionTime = transactionTime;
         this.transactionFee = transactionFee;
     }
+
 }
