@@ -1,10 +1,11 @@
 package util;
 
 public class AuthHolder {
-    public static Long   tokenId ;
-    public static String   tokenName ;
+    public static Long totkenUserId;
+    public static String   tokenUsername ;
+
     public static void reset(){
-        tokenId = null;
-        tokenName = null;
+        totkenUserId = null;
+        tokenUsername = null;
     }
 }

@@ -1,8 +1,12 @@
 package util;
 
 import config.DataSource;
+import repository.AccountRepo;
+import repository.AccountRepoImpl;
 import repository.UserRepo;
 import repository.UserRepoImpl;
+import service.AccountService;
+import service.AccountServiceImpl;
 import service.UserService;
 import service.UserServiceImpl;
 
@@ -10,9 +14,9 @@ import java.sql.Connection;
 
 public class ApplicationContext {
     private static final ApplicationContext INSTANCE = new ApplicationContext();
-    // private static final   UserService userService;
-    // private static final TweetService tweetService;
+
     private static final UserService userService;
+    private static final AccountService accountService;
 
     private ApplicationContext() {
     }
@@ -24,9 +28,11 @@ public class ApplicationContext {
     static {
         Connection connection = DataSource.getConnection();
         UserRepo userRepo = new UserRepoImpl(connection);
+AccountRepo accountRepo = new AccountRepoImpl(connection);
 
+        accountService = new AccountServiceImpl( accountRepo);
+        userService = new UserServiceImpl(userRepo, accountService);
 
-        userService = new UserServiceImpl(userRepo);
 
         // UserRepository userRepository=new UserRepositoryImpl(connection);
         //  TweetRepository tweetRepository=new TweetRepositoryImpl(connection);

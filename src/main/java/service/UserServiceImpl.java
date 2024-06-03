@@ -1,6 +1,8 @@
 package service;
 
+import entity.Account;
 import entity.User;
+import repository.AccountRepo;
 import repository.UserRepo;
 import util.AuthHolder;
 
@@ -8,9 +10,13 @@ import java.sql.SQLException;
 
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepoImpl;
+    private final AccountService accountService;
 
-    public UserServiceImpl(UserRepo userRepoImpl) {
+
+
+    public UserServiceImpl(UserRepo userRepoImpl, AccountService accountService) {
         this.userRepoImpl = userRepoImpl;
+        this.accountService = accountService;
     }
 
 
@@ -18,8 +24,8 @@ public class UserServiceImpl implements UserService {
     public boolean login(String username, String password) throws SQLException {
         User user = userRepoImpl.findByUsernamePassword(username, password);
         if (user != null) {
-            AuthHolder.tokenId = user.getId();
-            AuthHolder.tokenName = user.getUsername();
+            AuthHolder.totkenUserId = user.getId();
+            AuthHolder.tokenUsername = user.getUsername();
             return true;
         }
 
@@ -43,4 +49,10 @@ public class UserServiceImpl implements UserService {
         return userRepoImpl.addUser(user) != null;
 
     }
+
+    @Override
+    public boolean createAccount(Account account) {
+      return   accountService.createAccount(account);
+    }
+
 }
