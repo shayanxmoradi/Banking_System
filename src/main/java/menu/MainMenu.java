@@ -1,5 +1,6 @@
 package menu;
 
+import menu.login.LoginMenu;
 import menu.util.Input;
 import menu.util.Message;
 

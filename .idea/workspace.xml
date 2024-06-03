@@ -5,42 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1840caca-3861-49d1-8977-2b69e567f07e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/menu/login/AccountMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/menu/login/CardMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/menu/login/LoggedInMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/menu/login/MoneyTransactionMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/banking.Jhjp6w.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/banking.Jhjp6w.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/gallery.UndM9A.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/gallery.UndM9A.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/gallery_keeper.f3D1LQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/gallery_keeper.f3D1LQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/gallerying.UAdzTg.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/gallerying.UAdzTg.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/last.lpIyAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/last.lpIyAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/m.bQAAAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/m.bQAAAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/maktab.3oaJvw.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/maktab.3oaJvw.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/mk_115.9PsPwA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/mk_115.9PsPwA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/q2.4Q0AAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/q2.4Q0AAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/q3.4g0AAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/q3.4g0AAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/q4.4w0AAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/q4.4w0AAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/t4.QA4AAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/t4.QA4AAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/tamrin.d1V8yw.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/tamrin.d1V8yw.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/test.kkQ2AA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/test.kkQ2AA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/testing.EDI3qw.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/testing.EDI3qw.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/twitter.c6phyQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/twitter.c6phyQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/twitter2.H6TTYg.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/twitter2.H6TTYg.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/university.jupICw.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/university.jupICw.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/x.eAAAAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/x.eAAAAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/y.eQAAAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/y.eQAAAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/yeshanbe.ETNowg.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/73b7996a-db3d-4688-8923-5acbe29fc411/storage_v2/_src_/database/postgres.edMnLQ/schema/yeshanbe.ETNowg.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BankingApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BankingApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/entity/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/entity/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/entity/Bank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/entity/Bank.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/menu/LoginMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/menu/login/LoginMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/menu/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/menu/MainMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/menu/SignUpMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/menu/SignUpMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/menu/util/LoginMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/menu/LoginMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/menu/util/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/menu/util/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/UserRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repository/UserRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/UserRepoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repository/UserRepoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/ApplicationContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ApplicationContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/AuthHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/AuthHolder.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,48 +36,48 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "shayanxmoradi"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;shayanxmoradi&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/shayanxmoradi/Banking_System.git",
-    "accountId": "29155c84-d287-4e2a-872a-4eddfa71e379"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/shayanxmoradi/Banking_System.git&quot;,
+    &quot;accountId&quot;: &quot;29155c84-d287-4e2a-872a-4eddfa71e379&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2hJKsJvikvr1J5E8wbv7jVFm401" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.BankingApplication.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "/Users/shayan/Desktop/JAVA /projects/HW/HW8/Banking_System/src/main/java/org/example/Main.java",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.BankingApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/shayan/Desktop/JAVA /projects/HW/HW8/Banking_System/src/main/java/org/example/Main.java&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="" />
@@ -140,6 +117,7 @@
       <option name="presentableId" value="Default" />
       <updated>1717306945385</updated>
       <workItem from="1717306946399" duration="9367000" />
+      <workItem from="1717402704327" duration="4097000" />
     </task>
     <servers />
   </component>

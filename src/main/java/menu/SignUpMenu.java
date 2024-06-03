@@ -27,7 +27,7 @@ public class SignUpMenu {
                         System.out.println(Message.getSuccessfulMessage("sign up"));
                         break signup;
                     }
-                    System.err.println(Message.getExistMessage("username"));
+                    System.out.println(Message.getExistMessage("username"));
                     break ;
                 }
                 case "2" : {
