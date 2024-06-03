@@ -1,4 +1,4 @@
-package repository;
+package repository.user;
 
 import entity.User;
 

@@ -1,9 +1,9 @@
-package service;
+package service.user;
 
 import entity.Account;
 import entity.User;
-import repository.AccountRepo;
-import repository.UserRepo;
+import repository.user.UserRepo;
+import service.acount.AccountService;
 import util.AuthHolder;
 
 import java.sql.SQLException;

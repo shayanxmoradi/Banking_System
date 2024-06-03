@@ -1,4 +1,4 @@
-package repository;
+package repository.account;
 
 import entity.Account;
 import util.AuthHolder;

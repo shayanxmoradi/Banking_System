@@ -1,7 +1,7 @@
-package service;
+package service.acount;
 
 import entity.Account;
-import repository.AccountRepo;
+import repository.account.AccountRepo;
 
 public class AccountServiceImpl implements AccountService {
     private final AccountRepo accountRepo;

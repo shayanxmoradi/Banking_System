@@ -1,14 +1,14 @@
 package util;
 
 import config.DataSource;
-import repository.AccountRepo;
-import repository.AccountRepoImpl;
-import repository.UserRepo;
-import repository.UserRepoImpl;
-import service.AccountService;
-import service.AccountServiceImpl;
-import service.UserService;
-import service.UserServiceImpl;
+import repository.account.AccountRepo;
+import repository.account.AccountRepoImpl;
+import repository.user.UserRepo;
+import repository.user.UserRepoImpl;
+import service.acount.AccountService;
+import service.acount.AccountServiceImpl;
+import service.user.UserService;
+import service.user.UserServiceImpl;
 
 import java.sql.Connection;
 
