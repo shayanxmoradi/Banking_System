@@ -1,5 +1,9 @@
 package util.random;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 public class RandomGenerator {
@@ -35,7 +39,30 @@ public class RandomGenerator {
         Random random = new Random();
         return (char) ('0' + random.nextInt(10));
     }
+    public static String generateRandomCardNumber() {
+        StringBuilder cardNumber = new StringBuilder();
+        for (int i = 0; i < 16; i++) {
+            cardNumber.append(randomDigit());
+        }
+        return cardNumber.toString();
+    }
 
+    public static int generateRandomCCV2() {
+        StringBuilder ccv2 = new StringBuilder();
+        for (int i = 0; i < 3; i++) {
+            ccv2.append(randomDigit());
+        }
+        return Integer.parseInt(ccv2.toString());
+    }
+//    public static LocalDate generateExpireDate() {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.add(Calendar.YEAR, 4);
+//        return calendar.getTime();
+//    }
+
+    public static LocalDate generateExpireDate() {
+        return LocalDate.now().plus(4, ChronoUnit.YEARS);
+    }
 
 }
 

@@ -1,5 +1,6 @@
 package menu.login;
 
+import entity.CreditCard;
 import entity.User;
 import menu.SignUpMenu;
 import menu.util.Input;
@@ -13,6 +14,7 @@ public class CardMenu {
         cardMenu:
         while (true) {
             System.out.println("""
+                    
                     1 -> Register a Card
                     2 -> Delete a Card
                     3 -> Show a Card base on name of Card
@@ -25,7 +27,28 @@ public class CardMenu {
 
             switch (Input.scanner.next()) {
                 case "1": {
-                    //todo handle 7 operations here
+                    //todo handle Account
+                    Long accocuntId = 1L;
+                    System.out.println(Message.getInputMessage("Your Card number"));
+                    String cardName = Input.scanner.next();
+                    System.out.println(Message.getInputMessage("Your Card initial Balance"));
+                    double balance = Input.scanner.nextDouble();
+                    CreditCard card = new CreditCard(balance, accocuntId, cardName);
+                    if (ApplicationContext.getInstance().getCardService().addCard(card)) {
+                        System.out.println(Message.getSuccessfulMessage("Creating new Card"));
+                       String cardDetail="""
+                                Your created Card Information:
+                                Card Nummber : %s
+                                CCV2 : %s
+                                Expire Date : %s
+                                Balance : %s
+                                """;
+                        System.out.println(cardDetail.formatted(card.getCardNumber(),card.getCvv(),card.getExpiryDate(),card.getBalance()));
+
+                        break;
+                    }
+                    System.out.println(Message.getFailedMessage("creating new Card"));
+                    break;
                 }
                 case "2": {
                 }

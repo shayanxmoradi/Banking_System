@@ -3,10 +3,14 @@ package util;
 import config.DataSource;
 import repository.account.AccountRepo;
 import repository.account.AccountRepoImpl;
+import repository.card.CardRepo;
+import repository.card.CardRepoImpl;
 import repository.user.UserRepo;
 import repository.user.UserRepoImpl;
 import service.acount.AccountService;
 import service.acount.AccountServiceImpl;
+import service.card.CardService;
+import service.card.CardServiceImpl;
 import service.user.UserService;
 import service.user.UserServiceImpl;
 
@@ -17,6 +21,7 @@ public class ApplicationContext {
 
     private static final UserService userService;
     private static final AccountService accountService;
+    private static final CardService cardService;
 
     private ApplicationContext() {
     }
@@ -27,10 +32,13 @@ public class ApplicationContext {
 
     static {
         Connection connection = DataSource.getConnection();
-        UserRepo userRepo = new UserRepoImpl(connection);
-AccountRepo accountRepo = new AccountRepoImpl(connection);
 
-        accountService = new AccountServiceImpl( accountRepo);
+        UserRepo userRepo = new UserRepoImpl(connection);
+        AccountRepo accountRepo = new AccountRepoImpl(connection);
+        CardRepo cardRepo = new CardRepoImpl(connection);
+
+        accountService = new AccountServiceImpl(accountRepo);
+        cardService = new CardServiceImpl(cardRepo);
         userService = new UserServiceImpl(userRepo, accountService);
 
 
@@ -42,8 +50,12 @@ AccountRepo accountRepo = new AccountRepoImpl(connection);
 
 
     }
+
     public UserService getUserService() {
         return userService;
+    }
+    public CardService getCardService () {
+        return cardService;
     }
 
 }
