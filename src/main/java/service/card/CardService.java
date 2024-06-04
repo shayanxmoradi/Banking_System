@@ -9,7 +9,7 @@ import java.util.List;
 public interface CardService {
     boolean addCard(CreditCard card);
     boolean removeCard(CreditCard card) throws SQLException;
-    CreditCard getCardByCardName(String cardNumber);
+    CreditCard getCardByCardName(String cardNumber) throws SQLException;
     CreditCard getCardByAccountName(String accountName);
     List<CreditCard> getAllCards();
 

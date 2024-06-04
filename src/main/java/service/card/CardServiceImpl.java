@@ -24,9 +24,11 @@ public class CardServiceImpl implements CardService {
         return cardRepo.removeCard(card);
     }
 
+
+
     @Override
-    public CreditCard getCardByCardName(String cardNumber) {
-        return null;
+    public CreditCard getCardByCardName(String cardNumber) throws SQLException {
+        return cardRepo.getCardByName(cardNumber);
     }
 
     @Override

@@ -29,7 +29,7 @@ public class CardMenu {
                 case "1": {
                     //todo handle Account
                     Long accocuntId = 1L;
-                    System.out.println(Message.getInputMessage("Your Card number"));
+                    System.out.println(Message.getInputMessage("Your Card name"));
                     String cardName = Input.scanner.next();
                     System.out.println(Message.getInputMessage("Your Card initial Balance"));
                     double balance = Input.scanner.nextDouble();
@@ -66,6 +66,22 @@ public class CardMenu {
                     System.out.println(Message.getFailedMessage("deleting Card: " + card.getCardNumber()));
                 }
                 case "3": {
+                    System.out.println(Message.getInputMessage(" Card name, which you are looking for "));
+                    String cardName = Input.scanner.next();
+                    CreditCard card = ApplicationContext.getInstance().getCardService().getCardByCardName(cardName);
+
+                    if (card != null) {
+                        System.out.println(Message.getSuccessfulMessage("Card found"));
+                        System.out.println("card name: " + card.getCardName());
+                        System.out.println("card number: " + card.getCardNumber());
+                        System.out.println("card expire date: " + card.getExpiryDate());
+                        System.out.println("card balance: " + card.getBalance());
+                        System.out.println("ccv2: " + card.getCvv());
+                        break ;
+
+                    }
+                    System.out.println(Message.getFailedMessage("looking for Card: " + cardName));
+                    break ;
                 }
                 case "4": {
                 }
