@@ -117,13 +117,36 @@ public class CardRepoImpl implements CardRepo {
     }
 
 
+
+
     @Override
     public CreditCard getCardByAccountName(String accountName) {
         return null;
     }
 
     @Override
-    public List<CreditCard> getAllCards() {
-        return List.of();
+    public List<CreditCard> getAllCards() throws SQLException {
+        String selectQuery = """
+                                select * from card  
+                where  user_id_fk =?
+                                """;
+        PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+        preparedStatement.setInt(1, AuthHolder.totkenUserId.intValue());
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<CreditCard> cards = new ArrayList<>();
+        while (resultSet.next()) {
+            CreditCard card = new CreditCard();
+            card.setCardNumber(resultSet.getString("number"));
+            card.setBankName(resultSet.getString("bank_name"));
+            card.setBalance(resultSet.getDouble("balance"));
+            card.setActive(resultSet.getBoolean("is_active"));
+            card.setAccountId(resultSet.getLong("account_id_fk"));
+            card.setCardName(resultSet.getString("name"));
+            card.setExpiryDate(resultSet.getDate("expire_date").toLocalDate());
+            card.setCvv(resultSet.getInt("ccv2"));
+            cards.add(card);
+        }
+        return cards;
     }
 }

@@ -13,9 +13,9 @@ public interface CardRepo {
     CreditCard getCardByName(String name) throws SQLException;
 
     List<CreditCard> getCardsByBankName(String bankName) throws SQLException;
+    List<CreditCard> getAllCards() throws SQLException;
 
     CreditCard getCardByAccountName(String accountName);
 
-    List<CreditCard> getAllCards();
 
 }

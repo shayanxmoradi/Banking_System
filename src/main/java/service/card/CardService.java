@@ -10,9 +10,10 @@ public interface CardService {
     boolean addCard(CreditCard card);
     boolean removeCard(CreditCard card) throws SQLException;
     CreditCard getCardByCardName(String cardNumber) throws SQLException;
+    List<CreditCard> getAllCards() throws SQLException;
     CreditCard getCardByAccountName(String accountName);
     List<CreditCard> getCardsByBankName(String bankName) throws SQLException;
 
-    List<CreditCard> getAllCards();
+
 
 }

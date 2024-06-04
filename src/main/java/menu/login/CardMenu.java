@@ -110,6 +110,23 @@ public class CardMenu {
                     break;
                 }
                 case "5": {
+                    List<CreditCard> cards = ApplicationContext.getInstance().getCardService().getAllCards();
+                    if (!cards.isEmpty()) {
+                        System.out.println(Message.getSuccessfulMessage("Cards found"));
+
+                        for (CreditCard card : cards) {
+                            System.out.println();
+                            System.out.println("bank name: " + card.getBankName());
+                            System.out.println("card name: " + card.getCardName());
+                            System.out.println("card number: " + card.getCardNumber());
+                            System.out.println("card expire date: " + card.getExpiryDate());
+                            System.out.println("card balance: " + card.getBalance());
+                            System.out.println("ccv2: " + card.getCvv());
+                        }
+                        break;
+                    }
+                    System.out.println(Message.getFailedMessage("any Card"));
+                    break;
                 }
                 case "6": {
                 }

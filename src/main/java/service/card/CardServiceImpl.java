@@ -2,7 +2,6 @@ package service.card;
 
 import entity.CreditCard;
 import repository.card.CardRepo;
-import repository.card.CardRepoImpl;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -32,6 +31,11 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    public List<CreditCard> getAllCards() throws SQLException {
+        return cardRepo.getAllCards();
+    }
+
+    @Override
     public CreditCard getCardByAccountName(String accountName) {
         return null;
     }
@@ -41,8 +45,5 @@ public class CardServiceImpl implements CardService {
         return cardRepo.getCardsByBankName(bankName);
     }
 
-    @Override
-    public List<CreditCard> getAllCards() {
-        return List.of();
-    }
+
 }
