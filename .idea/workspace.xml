@@ -77,7 +77,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.BankingApplication.executor": "Run",
+    "Application.BankingApplication.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
@@ -139,7 +139,7 @@
       <updated>1717306945385</updated>
       <workItem from="1717306946399" duration="9367000" />
       <workItem from="1717402704327" duration="11125000" />
-      <workItem from="1717438610368" duration="8648000" />
+      <workItem from="1717438610368" duration="11572000" />
     </task>
     <servers />
   </component>
@@ -167,12 +167,21 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/repository/card/CardRepoImpl.java</url>
-          <line>67</line>
+          <line>69</line>
           <properties class="repository.card.CardRepoImpl" method="getCardByName">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/repository/card/CardRepoImpl.java</url>
+          <line>93</line>
+          <properties class="repository.card.CardRepoImpl" method="getCardsByBankName">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

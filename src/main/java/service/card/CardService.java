@@ -11,6 +11,8 @@ public interface CardService {
     boolean removeCard(CreditCard card) throws SQLException;
     CreditCard getCardByCardName(String cardNumber) throws SQLException;
     CreditCard getCardByAccountName(String accountName);
+    List<CreditCard> getCardsByBankName(String bankName) throws SQLException;
+
     List<CreditCard> getAllCards();
 
 }

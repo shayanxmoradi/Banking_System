@@ -37,6 +37,11 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    public List<CreditCard> getCardsByBankName(String bankName) throws SQLException {
+        return cardRepo.getCardsByBankName(bankName);
+    }
+
+    @Override
     public List<CreditCard> getAllCards() {
         return List.of();
     }

@@ -8,6 +8,7 @@ import menu.util.Message;
 import util.ApplicationContext;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class CardMenu {
     public static void show() throws SQLException {
@@ -29,11 +30,13 @@ public class CardMenu {
                 case "1": {
                     //todo handle Account
                     Long accocuntId = 1L;
+                    String bankName = "sparksasse";
                     System.out.println(Message.getInputMessage("Your Card name"));
                     String cardName = Input.scanner.next();
                     System.out.println(Message.getInputMessage("Your Card initial Balance"));
                     double balance = Input.scanner.nextDouble();
                     CreditCard card = new CreditCard(balance, accocuntId, cardName);
+                    card.setBankName(bankName);
                     if (ApplicationContext.getInstance().getCardService().addCard(card)) {
                         System.out.println(Message.getSuccessfulMessage("Creating new Card"));
                         String cardDetail = """
@@ -77,13 +80,34 @@ public class CardMenu {
                         System.out.println("card expire date: " + card.getExpiryDate());
                         System.out.println("card balance: " + card.getBalance());
                         System.out.println("ccv2: " + card.getCvv());
-                        break ;
+                        break;
 
                     }
                     System.out.println(Message.getFailedMessage("looking for Card: " + cardName));
-                    break ;
+                    break;
                 }
                 case "4": {
+                    System.out.println(Message.getInputMessage(" Bank name, which you are looking for Cards "));
+                    String bankName = Input.scanner.next();
+                    List<CreditCard> cards = ApplicationContext.getInstance().getCardService().getCardsByBankName(bankName);
+                    if (!cards.isEmpty()) {
+                        System.out.println(Message.getSuccessfulMessage("Cards found"));
+
+                        for (CreditCard card : cards) {
+                            System.out.println();
+                            System.out.println("bank name: " + card.getBankName());
+                            System.out.println("card name: " + card.getCardName());
+                            System.out.println("card number: " + card.getCardNumber());
+                            System.out.println("card expire date: " + card.getExpiryDate());
+                            System.out.println("card balance: " + card.getBalance());
+                            System.out.println("ccv2: " + card.getCvv());
+                        }
+
+                        break;
+                    }
+                    System.out.println(Message.getFailedMessage("looking for Cards with bank: " + bankName));
+
+                    break;
                 }
                 case "5": {
                 }

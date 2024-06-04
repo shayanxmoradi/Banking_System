@@ -12,6 +12,7 @@ public class CreditCard extends BaseEntity {
     private Long accountId;
     private boolean isActive = true;
     private String cardName;
+    private String bankName;
 
     public CreditCard( double balance, Long accountId,String cardName) {
 
@@ -83,4 +84,11 @@ public class CreditCard extends BaseEntity {
         this.cardName = cardName;
     }
 
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
 }

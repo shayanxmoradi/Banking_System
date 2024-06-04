@@ -4,6 +4,7 @@ import entity.CreditCard;
 import util.AuthHolder;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CardRepoImpl implements CardRepo {
@@ -18,9 +19,9 @@ public class CardRepoImpl implements CardRepo {
 
         String insertQuery = """
                             insert into card ( number, balance, is_active,
-                              account_id_fk, name, expire_date, ccv2,user_id_fk
+                              account_id_fk, name, expire_date, ccv2,user_id_fk,bank_name
                               
-                ) values (?,?,?,?,?,?,?,?)
+                ) values (?,?,?,?,?,?,?,?,?)
                             """;
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery,
                 PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -33,6 +34,7 @@ public class CardRepoImpl implements CardRepo {
             preparedStatement.setDate(6, Date.valueOf(card.getExpiryDate()));
             preparedStatement.setInt(7, card.getCvv());
             preparedStatement.setInt(8, AuthHolder.totkenUserId.intValue());
+            preparedStatement.setString(9, card.getBankName());
 
             if (preparedStatement.executeUpdate() > 0) {
                 try (ResultSet keys = preparedStatement.getGeneratedKeys()) {
@@ -84,12 +86,35 @@ public class CardRepoImpl implements CardRepo {
             card.setExpiryDate(resultSet.getDate("expire_date").toLocalDate());
             card.setCvv(resultSet.getInt("ccv2"));
             return card;
-
         }
-
         return null;
     }
 
+    @Override
+    public List<CreditCard> getCardsByBankName(String bankName) throws SQLException {
+        String selectQuery = """
+                                select * from card  
+                where bank_name = ? AND user_id_fk =?
+                                """;
+        PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+        preparedStatement.setString(1, bankName.toLowerCase());
+        preparedStatement.setInt(2, AuthHolder.totkenUserId.intValue());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<CreditCard> cards = new ArrayList<>();
+        while (resultSet.next()) {
+            CreditCard card = new CreditCard();
+            card.setCardNumber(resultSet.getString("number"));
+            card.setBankName(resultSet.getString("bank_name"));
+            card.setBalance(resultSet.getDouble("balance"));
+            card.setActive(resultSet.getBoolean("is_active"));
+            card.setAccountId(resultSet.getLong("account_id_fk"));
+            card.setCardName(resultSet.getString("name"));
+            card.setExpiryDate(resultSet.getDate("expire_date").toLocalDate());
+            card.setCvv(resultSet.getInt("ccv2"));
+            cards.add(card);
+        }
+        return cards;
+    }
 
 
     @Override
