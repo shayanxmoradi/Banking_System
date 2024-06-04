@@ -24,6 +24,8 @@ public class CreditCard extends BaseEntity {
         this.accountName = accountName;
     }
 
+    public CreditCard(){}
+
     public String getCardNumber() {
         return cardNumber;
     }
@@ -52,5 +54,9 @@ public class CreditCard extends BaseEntity {
 
     public String getAccountName() {
         return accountName;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 }

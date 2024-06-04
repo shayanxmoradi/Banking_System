@@ -4,6 +4,7 @@ import entity.CreditCard;
 import repository.card.CardRepo;
 import repository.card.CardRepoImpl;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class CardServiceImpl implements CardService {
@@ -19,8 +20,8 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public boolean removeCard(CreditCard card) {
-        return false;
+    public boolean removeCard(CreditCard card) throws SQLException {
+        return cardRepo.removeCard(card);
     }
 
     @Override

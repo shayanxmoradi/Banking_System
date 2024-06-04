@@ -49,9 +49,20 @@ public class CardRepoImpl implements CardRepo {
 
 
     @Override
-    public boolean removeCard(CreditCard card) {
-        return false;
+    public boolean removeCard(CreditCard card) throws SQLException {
+        String selectQuery = """
+                                Delete  
+                From card c where c.id= ?
+                                """;
+        PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+        preparedStatement.setInt(1, card.getId().intValue());
+        int affectedRows = preparedStatement.executeUpdate();
+        preparedStatement.close();
+        return affectedRows > 0;
+
     }
+
+
 
     @Override
     public CreditCard getCardByCardName(String cardNumber) {

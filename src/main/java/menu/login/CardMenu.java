@@ -14,7 +14,7 @@ public class CardMenu {
         cardMenu:
         while (true) {
             System.out.println("""
-                    
+                                        
                     1 -> Register a Card
                     2 -> Delete a Card
                     3 -> Show a Card base on name of Card
@@ -36,14 +36,14 @@ public class CardMenu {
                     CreditCard card = new CreditCard(balance, accocuntId, cardName);
                     if (ApplicationContext.getInstance().getCardService().addCard(card)) {
                         System.out.println(Message.getSuccessfulMessage("Creating new Card"));
-                       String cardDetail="""
+                        String cardDetail = """
                                 Your created Card Information:
                                 Card Nummber : %s
                                 CCV2 : %s
                                 Expire Date : %s
                                 Balance : %s
                                 """;
-                        System.out.println(cardDetail.formatted(card.getCardNumber(),card.getCvv(),card.getExpiryDate(),card.getBalance()));
+                        System.out.println(cardDetail.formatted(card.getCardNumber(), card.getCvv(), card.getExpiryDate(), card.getBalance()));
 
                         break;
                     }
@@ -51,6 +51,19 @@ public class CardMenu {
                     break;
                 }
                 case "2": {
+                    System.out.println("which Card you want to delete");
+                    System.out.println(Message.getInputMessage("Your Card number"));
+                    String cardNumber = Input.scanner.next();
+                    //todo here handle card to delete
+                    Long deleteCardId = 1L;
+                    CreditCard card = new CreditCard();
+                    card.setCardNumber(cardNumber);
+                    card.setId(deleteCardId);
+                    if (ApplicationContext.getInstance().getCardService().removeCard(card)) {
+                        System.out.println(Message.getSuccessfulMessage("Deleting Card"));
+                        break;
+                    }
+                    System.out.println(Message.getFailedMessage("deleting Card: " + card.getCardNumber()));
                 }
                 case "3": {
                 }
