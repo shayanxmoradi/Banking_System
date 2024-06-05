@@ -25,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean deleteAccount(Account account) {
-        return false;
+        return accountRepo.deleteAccount(account);
     }
 
     @Override
@@ -36,5 +36,20 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccountById(Long accountId) {
         return accountRepo.getAccountById(accountId);
+    }
+
+    @Override
+    public Account getAccountByAccountNumber(String accountNumber) {
+        return accountRepo.getAccountByAccountNumber(accountNumber);
+    }
+
+    @Override
+    public Account getAccountByUserId(Long userId) {
+        return accountRepo.getAccountByUserId(userId);
+    }
+
+    @Override
+    public boolean updateAccount(Account account) {
+        return accountRepo.updateAccount(account);
     }
 }

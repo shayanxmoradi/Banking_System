@@ -5,6 +5,7 @@ import entity.CreditCard;
 import menu.util.Input;
 import menu.util.Message;
 import util.ApplicationContext;
+import util.AuthHolder;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -45,15 +46,47 @@ public class MoneyTransactionMenu {
                     break;
                 }
                 case "2": {
-                    //todo wich account is starter? having one and picking it looks ok
+//todo make picking account like card picker
+                    System.out.println("this is for Transacatino between 150 and 500");
                     System.out.println(Message.getInputMessage(" Destinatin Account Nummber"));
-                   // String starterAccountNumber = ;
                     String destAccountNumber = Input.scanner.next();
+                    System.out.println(Message.getInputMessage("Transaction amount (150-500)"));
+                    double amount = Input.scanner.nextDouble();
+                    if (amount < 150 || amount > 500) {
+                        System.out.println("Invalid amount");
+                        break;
+                    } else {
+                        Account starterAccount;
+                        Account desAccount;
+                        try {
+                            starterAccount = ApplicationContext.getInstance().getAccountService().getAccountById(AuthHolder.totkenUserId);
+                            desAccount = ApplicationContext.getInstance().getAccountService().getAccountByAccountNumber(destAccountNumber);
+                        } catch (Exception e) {
+                            System.out.println("Account not found");
+                            break;
+                        }
+                        if (starterAccount.getBalance() < amount) {
+                            System.out.println(" you don't have enough money");
+                            break;
+                        } else {
+                            //todo watch out for difrence of paya number and account number
+                            try {
 
-                  //  boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(startAccount.getId(), startAccount.getBalance() - amount);
-                  //  boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(destAccount.getId(), destAccount.getBalance() + amount);
 
-                    break;
+                                boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount);
+                                boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
+                                if (reducingProcessIsSucess && increasingProcessIsSucess) {
+                                    System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Account not found");
+
+                            }
+                            System.out.println(Message.getFailedMessage("Transfer"));
+                            break;
+                        }
+                    }
                 }
                 case "3": {
 
