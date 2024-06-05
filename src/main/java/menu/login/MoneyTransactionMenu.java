@@ -31,13 +31,28 @@ public class MoneyTransactionMenu {
                     CreditCard chosedCard = cardList.get(pickedCard - 1);
                     System.out.println(Message.getInputMessage(Message.getInputMessage(" a Destination Card")));
                     String destCardNumber = Input.scanner.next();
-                    System.out.println(Message.getInputMessage(Message.getInputMessage("Transaction amount")));
-                    double amount = Input.scanner.nextDouble();
+                    double amount;
+                    validAmount:
+                    while (true) {
+                        System.out.println(Message.getInputMessage(Message.getInputMessage("Transaction amount under 150")));
+                        amount = Input.scanner.nextDouble();
+                        if (amount > 0 && amount < 150) {
+                            break validAmount;
+                        }
+                        System.out.println("Invalid amount");
+                    }
                     boolean isSucsesful = cardTransaction(chosedCard.getCardNumber(), destCardNumber, amount);
                     break;
                 }
                 case "2": {
-                    //todo  Do Bank Transfer(to Person)
+                    //todo wich account is starter? having one and picking it looks ok
+                    System.out.println(Message.getInputMessage(" Destinatin Account Nummber"));
+                   // String starterAccountNumber = ;
+                    String destAccountNumber = Input.scanner.next();
+
+                  //  boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(startAccount.getId(), startAccount.getBalance() - amount);
+                  //  boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(destAccount.getId(), destAccount.getBalance() + amount);
+
                     break;
                 }
                 case "3": {
@@ -67,11 +82,14 @@ public class MoneyTransactionMenu {
 
         Account startAccount = ApplicationContext.getInstance().getCardService().getAccountByCardNumber(cardName);
         Account destAccount = ApplicationContext.getInstance().getCardService().getAccountByCardNumber(destCardNumber);
-        System.out.println(startAccount.toString() + destAccount.toString());
+        if (startAccount == null || destAccount == null) {
+            System.out.println(Message.getFailedMessage("finding Cards "));
+            return false;
+        }
         if (startAccount.getBalance() >= amount) {
             System.out.println("hi");
-            System.out.println(" id "+startAccount.getId());
-            System.out.println(" des id "+destAccount.getId());
+            System.out.println(" id " + startAccount.getId());
+            System.out.println(" des id " + destAccount.getId());
 
             boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(startAccount.getId(), startAccount.getBalance() - amount);
             boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(destAccount.getId(), destAccount.getBalance() + amount);
@@ -81,8 +99,6 @@ public class MoneyTransactionMenu {
                 System.out.println(Message.getSuccessfulMessage(amount + " Card Transfer to " + destAccount.getUserFristName()));
                 return true;
             } else System.out.println("unable to transfer money");
-            //todo change account Balance
-
         } else
             System.out.println("you are low on your Currency!");
 

@@ -7,5 +7,5 @@ public interface AccountService {
     Account getAccountByAccountName(String accountName);
     boolean deleteAccount(Account account);
     boolean updateAccountBalance(Long accountId, double balance);
-
+Account getAccountById(Long accountId);
 }

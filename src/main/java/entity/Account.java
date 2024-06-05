@@ -12,7 +12,7 @@ public class Account extends BaseEntity {
     private String bankName;
     private Double balance;
 
-    public Account(String accountName,  Long bankId, String bankName, Double balance) {
+    public Account(String accountName, Long bankId, String bankName, Double balance) {
         this.accountName = accountName;
         this.accountNummber = RandomGenerator.generateRandomAccountNummber();//todo auto
         this.payaNummber = RandomGenerator.generateRandomIBAN();// todo auto
@@ -20,7 +20,21 @@ public class Account extends BaseEntity {
         this.bankName = bankName;
         this.balance = balance;
     }
-public Account(){}
+
+    public Account(String accountName, String accountNummber, String payaNummber, Long userId, String userFristName, Long bankId, String bankName, Double balance) {
+        this.accountName = accountName;
+        this.accountNummber = accountNummber;
+        this.payaNummber = payaNummber;
+        this.userId = userId;
+        this.userFristName = userFristName;
+        BankId = bankId;
+        this.bankName = bankName;
+        this.balance = balance;
+    }
+
+    public Account() {
+    }
+
     public String getAccountName() {
         return accountName;
     }

@@ -32,4 +32,9 @@ public class AccountServiceImpl implements AccountService {
     public boolean updateAccountBalance(Long accountId, double balance) {
         return accountRepo.updateAccountBalance(accountId, balance);
     }
+
+    @Override
+    public Account getAccountById(Long accountId) {
+        return accountRepo.getAccountById(accountId);
+    }
 }
