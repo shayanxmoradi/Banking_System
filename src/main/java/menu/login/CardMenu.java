@@ -66,7 +66,9 @@ public class CardMenu {
                         break;
                     }
                     System.out.println(Message.getFailedMessage("deleting Card: " + card.getCardNumber()));
+                break ;
                 }
+
                 case "3": {
                     System.out.println(Message.getInputMessage(" Card name, which you are looking for "));
                     String cardName = Input.scanner.next();

@@ -148,7 +148,8 @@ public class CardRepoImpl implements CardRepo {
     @Override
     public Account getAccountByCardNumber(String cardNumber) throws SQLException {
         String selectQuery = """
-                                         select * from card  
+                                         select a.id, a.name, a.number,   a.user_id_fk, a.bank_name_fk,  a.user_first_name,  a.paya_number, a.bank_id_fk, a.balance
+                         from card  
                                   inner join banking.account a on a.id = card.account_id_fk
                 where card.number = ?
                                          """;
@@ -160,12 +161,13 @@ public class CardRepoImpl implements CardRepo {
         if (resultSet.next()) {
 
             account.setAccountName(resultSet.getString("name"));
-            account.setBankId((long)resultSet.getInt("bank_id_fk"));
+            account.setBankId((long) resultSet.getInt("bank_id_fk"));
             account.setUserId((long) resultSet.getInt("user_id_fk"));
             account.setPayaNummber(resultSet.getString("paya_number"));
             account.setBalance(resultSet.getDouble("balance"));
             account.setUserFristName(resultSet.getString("user_first_name"));
-            account.setId((long)resultSet.getInt("id"));
+            account.setId((long) resultSet.getInt("id"));
+            System.out.println("id of retrieved Acc"+resultSet.getInt("id"));
             account.setBankName(resultSet.getString("bank_name_fk"));
         }
         return account;

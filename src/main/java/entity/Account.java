@@ -84,4 +84,18 @@ public Account(){}
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+               "accountName='" + accountName + '\'' +
+               ", accountNummber='" + accountNummber + '\'' +
+               ", payaNummber='" + payaNummber + '\'' +
+               ", userId=" + userId +
+               ", userFristName='" + userFristName + '\'' +
+               ", BankId=" + BankId +
+               ", bankName='" + bankName + '\'' +
+               ", balance=" + balance +
+               '}';
+    }
 }

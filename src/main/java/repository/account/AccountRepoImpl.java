@@ -72,8 +72,7 @@ public class AccountRepoImpl implements AccountRepo {
                 WHERE id=?
                             """;
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery,
-                PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
             preparedStatement.setDouble(1, balance);
             preparedStatement.setInt(2, accountId.intValue());
 

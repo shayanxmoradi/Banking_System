@@ -28,7 +28,7 @@ public class MoneyTransactionMenu {
                     List<CreditCard> cardList = showAllCards(ApplicationContext.getInstance().getCardService().getAllCards(), "any Card");
                     System.out.println(Message.getInputMessage("Card nummber which you want to use "));
                     int pickedCard = Input.scanner.nextInt();
-                    CreditCard chosedCard = cardList.get(pickedCard -1);
+                    CreditCard chosedCard = cardList.get(pickedCard - 1);
                     System.out.println(Message.getInputMessage(Message.getInputMessage(" a Destination Card")));
                     String destCardNumber = Input.scanner.next();
                     System.out.println(Message.getInputMessage(Message.getInputMessage("Transaction amount")));
@@ -65,18 +65,25 @@ public class MoneyTransactionMenu {
         //todo find Account BaseOn CardNummber
 
 
-            Account startAccount = ApplicationContext.getInstance().getCardService().getAccountByCardNumber(cardName);
-            Account destAccount = ApplicationContext.getInstance().getCardService().getAccountByCardNumber(destCardNumber);
-            if (startAccount.getBalance() >= amount) {
-                boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(startAccount.getId(), startAccount.getBalance() - amount);
-                boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(destAccount.getId(), startAccount.getBalance() + amount);
-                if (reducingProcessIsSucess && increasingProcessIsSucess) {
-                    System.out.println(Message.getSuccessfulMessage(amount + " Card Transfer to " + destAccount.getUserFristName()));
-                    return true;
-                }else System.out.println("unable to transfer money");
-                //todo change account Balance
+        Account startAccount = ApplicationContext.getInstance().getCardService().getAccountByCardNumber(cardName);
+        Account destAccount = ApplicationContext.getInstance().getCardService().getAccountByCardNumber(destCardNumber);
+        System.out.println(startAccount.toString() + destAccount.toString());
+        if (startAccount.getBalance() >= amount) {
+            System.out.println("hi");
+            System.out.println(" id "+startAccount.getId());
+            System.out.println(" des id "+destAccount.getId());
 
-            }else
+            boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(startAccount.getId(), startAccount.getBalance() - amount);
+            boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(destAccount.getId(), destAccount.getBalance() + amount);
+            System.out.println("reducingProcessIsSucess" + reducingProcessIsSucess);
+            System.out.println("increasingProcessIsSucess" + increasingProcessIsSucess);
+            if (reducingProcessIsSucess && increasingProcessIsSucess) {
+                System.out.println(Message.getSuccessfulMessage(amount + " Card Transfer to " + destAccount.getUserFristName()));
+                return true;
+            } else System.out.println("unable to transfer money");
+            //todo change account Balance
+
+        } else
             System.out.println("you are low on your Currency!");
 
         return false;
@@ -87,8 +94,8 @@ public class MoneyTransactionMenu {
         if (!cards.isEmpty()) {
             System.out.println(Message.getSuccessfulMessage("Cards found"));
 
-            for (int i = 0; i < cards.size() ; i++) {
-                System.out.println("Card " + i+1 + ": ");
+            for (int i = 0; i < cards.size(); i++) {
+                System.out.println("Card " + i + 1 + ": ");
                 CreditCard card = cards.get(i);
                 System.out.println("bank name: " + card.getBankName());
                 System.out.println("card name: " + card.getCardName());
