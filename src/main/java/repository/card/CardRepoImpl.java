@@ -1,5 +1,6 @@
 package repository.card;
 
+import entity.Account;
 import entity.CreditCard;
 import util.AuthHolder;
 
@@ -18,23 +19,22 @@ public class CardRepoImpl implements CardRepo {
     public CreditCard addCard(CreditCard card) {
 
         String insertQuery = """
-                            insert into card ( number, balance, is_active,
+                            insert into card ( number,  is_active,
                               account_id_fk, name, expire_date, ccv2,user_id_fk,bank_name
                               
-                ) values (?,?,?,?,?,?,?,?,?)
+                ) values (?,?,?,?,?,?,?,?)
                             """;
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery,
                 PreparedStatement.RETURN_GENERATED_KEYS)) {
             //  preparedStatement.setInt(1, card.getId().intValue());
             preparedStatement.setString(1, card.getCardNumber());
-            preparedStatement.setDouble(2, card.getBalance());
-            preparedStatement.setBoolean(3, card.isActive());
-            preparedStatement.setLong(4, card.getAccountId());
-            preparedStatement.setString(5, card.getCardName().toLowerCase());
-            preparedStatement.setDate(6, Date.valueOf(card.getExpiryDate()));
-            preparedStatement.setInt(7, card.getCvv());
-            preparedStatement.setInt(8, AuthHolder.totkenUserId.intValue());
-            preparedStatement.setString(9, card.getBankName());
+            preparedStatement.setBoolean(2, card.isActive());
+            preparedStatement.setLong(3, card.getAccountId());
+            preparedStatement.setString(4, card.getCardName().toLowerCase());
+            preparedStatement.setDate(5, Date.valueOf(card.getExpiryDate()));
+            preparedStatement.setInt(6, card.getCvv());
+            preparedStatement.setInt(7, AuthHolder.totkenUserId.intValue());
+            preparedStatement.setString(8, card.getBankName());
 
             if (preparedStatement.executeUpdate() > 0) {
                 try (ResultSet keys = preparedStatement.getGeneratedKeys()) {
@@ -79,7 +79,6 @@ public class CardRepoImpl implements CardRepo {
         if (resultSet.next()) {
             CreditCard card = new CreditCard();
             card.setCardNumber(resultSet.getString("number"));
-            card.setBalance(resultSet.getDouble("balance"));
             card.setActive(resultSet.getBoolean("is_active"));
             card.setAccountId(resultSet.getLong("account_id_fk"));
             card.setCardName(resultSet.getString("name"));
@@ -105,7 +104,6 @@ public class CardRepoImpl implements CardRepo {
             CreditCard card = new CreditCard();
             card.setCardNumber(resultSet.getString("number"));
             card.setBankName(resultSet.getString("bank_name"));
-            card.setBalance(resultSet.getDouble("balance"));
             card.setActive(resultSet.getBoolean("is_active"));
             card.setAccountId(resultSet.getLong("account_id_fk"));
             card.setCardName(resultSet.getString("name"));
@@ -115,8 +113,6 @@ public class CardRepoImpl implements CardRepo {
         }
         return cards;
     }
-
-
 
 
     @Override
@@ -139,7 +135,6 @@ public class CardRepoImpl implements CardRepo {
             CreditCard card = new CreditCard();
             card.setCardNumber(resultSet.getString("number"));
             card.setBankName(resultSet.getString("bank_name"));
-            card.setBalance(resultSet.getDouble("balance"));
             card.setActive(resultSet.getBoolean("is_active"));
             card.setAccountId(resultSet.getLong("account_id_fk"));
             card.setCardName(resultSet.getString("name"));
@@ -148,5 +143,31 @@ public class CardRepoImpl implements CardRepo {
             cards.add(card);
         }
         return cards;
+    }
+
+    @Override
+    public Account getAccountByCardNumber(String cardNumber) throws SQLException {
+        String selectQuery = """
+                                         select * from card  
+                                  inner join banking.account a on a.id = card.account_id_fk
+                where card.number = ?
+                                         """;
+        PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+        preparedStatement.setString(1, cardNumber);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        Account account = new Account();
+        if (resultSet.next()) {
+
+            account.setAccountName(resultSet.getString("name"));
+            account.setBankId((long)resultSet.getInt("bank_id_fk"));
+            account.setUserId((long) resultSet.getInt("user_id_fk"));
+            account.setPayaNummber(resultSet.getString("paya_number"));
+            account.setBalance(resultSet.getDouble("balance"));
+            account.setUserFristName(resultSet.getString("user_first_name"));
+            account.setId((long)resultSet.getInt("id"));
+            account.setBankName(resultSet.getString("bank_name_fk"));
+        }
+        return account;
     }
 }

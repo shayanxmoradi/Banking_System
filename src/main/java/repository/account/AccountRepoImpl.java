@@ -1,6 +1,7 @@
 package repository.account;
 
 import entity.Account;
+import org.jetbrains.annotations.NotNull;
 import util.AuthHolder;
 
 import java.sql.*;
@@ -24,9 +25,9 @@ public class AccountRepoImpl implements AccountRepo {
                 PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, AuthHolder.totkenUserId.intValue());
             preparedStatement.setString(2, AuthHolder.tokenUsername);
-            preparedStatement.setString(3,account.getAccountName());
-            preparedStatement.setString(4,account.getAccountNummber());
-            preparedStatement.setString(5,account.getPayaNummber());
+            preparedStatement.setString(3, account.getAccountName());
+            preparedStatement.setString(4, account.getAccountNummber());
+            preparedStatement.setString(5, account.getPayaNummber());
             preparedStatement.setInt(6, account.getBankId().intValue());
             preparedStatement.setString(7, account.getBankName());
             preparedStatement.setDouble(8, account.getBalance());
@@ -41,11 +42,10 @@ public class AccountRepoImpl implements AccountRepo {
             }
         } catch (SQLException SqlE) {
             SqlE.printStackTrace();
-            throw new RuntimeException("Error saving tweet", SqlE);
+            throw new RuntimeException("Error adding account", SqlE);
         }
         return null;
     }
-
 
 
     @Override
@@ -56,6 +56,34 @@ public class AccountRepoImpl implements AccountRepo {
 
     @Override
     public boolean deleteAccount(Account account) {
+        return false;
+    }
+
+    @Override
+    public boolean updateAccount(Account account) {
+        return false;
+    }
+
+    @Override
+    public boolean updateAccountBalance(@NotNull Long accountId, double balance) {
+//todo
+        String insertQuery = """
+                UPDATE account SET balance=  ? 
+                WHERE id=?
+                            """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery,
+                PreparedStatement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setDouble(1, balance);
+            preparedStatement.setInt(2, accountId.intValue());
+
+            if (preparedStatement.executeUpdate() > 0) {
+                return true;
+            }
+        } catch (SQLException SqlE) {
+            SqlE.printStackTrace();
+            throw new RuntimeException("Error updating Balance", SqlE);
+        }
         return false;
     }
 }

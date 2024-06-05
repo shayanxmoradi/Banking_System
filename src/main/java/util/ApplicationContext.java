@@ -57,5 +57,8 @@ public class ApplicationContext {
     public CardService getCardService () {
         return cardService;
     }
+    public AccountService getAccountService () {
+        return accountService;
+    }
 
 }

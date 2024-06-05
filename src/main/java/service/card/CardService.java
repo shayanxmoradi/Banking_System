@@ -1,6 +1,7 @@
 package service.card;
 
 
+import entity.Account;
 import entity.CreditCard;
 
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ public interface CardService {
     List<CreditCard> getAllCards() throws SQLException;
     CreditCard getCardByAccountName(String accountName);
     List<CreditCard> getCardsByBankName(String bankName) throws SQLException;
+    Account getAccountByCardNumber(String cardNumber) throws SQLException;
 
 
 

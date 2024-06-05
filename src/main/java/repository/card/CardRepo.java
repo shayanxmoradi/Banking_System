@@ -1,5 +1,6 @@
 package repository.card;
 
+import entity.Account;
 import entity.CreditCard;
 
 import java.sql.SQLException;
@@ -13,7 +14,10 @@ public interface CardRepo {
     CreditCard getCardByName(String name) throws SQLException;
 
     List<CreditCard> getCardsByBankName(String bankName) throws SQLException;
+
     List<CreditCard> getAllCards() throws SQLException;
+
+    Account getAccountByCardNumber(String cardNumber) throws SQLException;
 
     CreditCard getCardByAccountName(String accountName);
 

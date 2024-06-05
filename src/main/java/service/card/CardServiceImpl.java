@@ -1,5 +1,6 @@
 package service.card;
 
+import entity.Account;
 import entity.CreditCard;
 import repository.card.CardRepo;
 
@@ -43,6 +44,11 @@ public class CardServiceImpl implements CardService {
     @Override
     public List<CreditCard> getCardsByBankName(String bankName) throws SQLException {
         return cardRepo.getCardsByBankName(bankName);
+    }
+
+    @Override
+    public Account getAccountByCardNumber(String cardNumber) throws SQLException {
+        return cardRepo.getAccountByCardNumber(cardNumber);
     }
 
 

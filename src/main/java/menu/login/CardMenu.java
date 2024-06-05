@@ -33,9 +33,9 @@ public class CardMenu {
                     String bankName = "sparksasse";
                     System.out.println(Message.getInputMessage("Your Card name"));
                     String cardName = Input.scanner.next();
-                    System.out.println(Message.getInputMessage("Your Card initial Balance"));
-                    double balance = Input.scanner.nextDouble();
-                    CreditCard card = new CreditCard(balance, accocuntId, cardName);
+//                    System.out.println(Message.getInputMessage("Your Card initial Balance"));
+//                    double balance = Input.scanner.nextDouble();
+                    CreditCard card = new CreditCard( accocuntId, cardName);
                     card.setBankName(bankName);
                     if (ApplicationContext.getInstance().getCardService().addCard(card)) {
                         System.out.println(Message.getSuccessfulMessage("Creating new Card"));
@@ -44,9 +44,8 @@ public class CardMenu {
                                 Card Nummber : %s
                                 CCV2 : %s
                                 Expire Date : %s
-                                Balance : %s
                                 """;
-                        System.out.println(cardDetail.formatted(card.getCardNumber(), card.getCvv(), card.getExpiryDate(), card.getBalance()));
+                        System.out.println(cardDetail.formatted(card.getCardNumber(), card.getCvv(), card.getExpiryDate()));
 
                         break;
                     }
@@ -78,7 +77,6 @@ public class CardMenu {
                         System.out.println("card name: " + card.getCardName());
                         System.out.println("card number: " + card.getCardNumber());
                         System.out.println("card expire date: " + card.getExpiryDate());
-                        System.out.println("card balance: " + card.getBalance());
                         System.out.println("ccv2: " + card.getCvv());
                         break;
 
@@ -122,7 +120,6 @@ public class CardMenu {
                 System.out.println("card name: " + card.getCardName());
                 System.out.println("card number: " + card.getCardNumber());
                 System.out.println("card expire date: " + card.getExpiryDate());
-                System.out.println("card balance: " + card.getBalance());
                 System.out.println("ccv2: " + card.getCvv());
             }
             return;

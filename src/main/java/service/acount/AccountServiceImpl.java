@@ -27,4 +27,9 @@ public class AccountServiceImpl implements AccountService {
     public boolean deleteAccount(Account account) {
         return false;
     }
+
+    @Override
+    public boolean updateAccountBalance(Long accountId, double balance) {
+        return accountRepo.updateAccountBalance(accountId, balance);
+    }
 }
