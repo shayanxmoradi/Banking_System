@@ -15,6 +15,7 @@ public class MoneyTransactionMenu {
         moneyTransMenu:
         while (true) {
             System.out.println("""
+                            
                             1 -> Normal Money Transaction(Card to Card)
                             2 -> Do Bank Transfer(to Person)
                             3 -> Do Muliple Bank Transfer
@@ -27,9 +28,16 @@ public class MoneyTransactionMenu {
                     //todo Normal Money Transaction(Card to Card)
                     System.out.println("choose Card you want to use to transfer Money");
                     List<CreditCard> cardList = showAllCards(ApplicationContext.getInstance().getCardService().getAllCards(), "any Card");
-                    System.out.println(Message.getInputMessage("Card nummber which you want to use "));
-                    int pickedCard = Input.scanner.nextInt();
-                    CreditCard chosedCard = cardList.get(pickedCard - 1);
+                    CreditCard chosedCard;
+                    try {
+                        System.out.println(Message.getInputMessage("Card nummber which you want to use "));
+                        int pickedCard = Input.scanner.nextInt();
+                        chosedCard = cardList.get(pickedCard - 1);
+                    } catch (Exception e) {
+                        System.out.println("invalid number");
+                        break;
+                    }
+
                     System.out.println(Message.getInputMessage(Message.getInputMessage(" a Destination Card")));
                     String destCardNumber = Input.scanner.next();
                     double amount;
@@ -59,8 +67,11 @@ public class MoneyTransactionMenu {
                         Account starterAccount;
                         Account desAccount;
                         try {
-                            starterAccount = ApplicationContext.getInstance().getAccountService().getAccountById(AuthHolder.totkenUserId);
+                            starterAccount = ApplicationContext.getInstance().getAccountService().getAccountByUserId(AuthHolder.totkenUserId);
+                            System.out.println("starter account"+starterAccount.getAccountNummber());
                             desAccount = ApplicationContext.getInstance().getAccountService().getAccountByAccountNumber(destAccountNumber);
+                            System.out.println("des account"+starterAccount.getAccountNummber());
+
                         } catch (Exception e) {
                             System.out.println("Account not found");
                             break;
@@ -71,7 +82,6 @@ public class MoneyTransactionMenu {
                         } else {
                             //todo watch out for difrence of paya number and account number
                             try {
-
 
                                 boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount);
                                 boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
@@ -91,11 +101,48 @@ public class MoneyTransactionMenu {
                 case "3": {
 
                     //todo Do Muliple Bank Transfer
-                    break;
+
                 }
                 case "4": {
-                    //todo Do Sepsical Bank Transfer(SATNA)
-                    break;
+                    System.out.println("SATNA is for Transacatino between 500 and 5000");
+                    System.out.println(Message.getInputMessage(" Destinatin Account Nummber"));
+                    String destAccountNumber = Input.scanner.next();
+                    System.out.println(Message.getInputMessage("Transaction amount (500-5000)"));
+                    double amount = Input.scanner.nextDouble();
+                    if (amount < 500 || amount > 5000) {
+                        System.out.println("Invalid amount");
+                        break;
+                    } else {
+                        Account starterAccount;
+                        Account desAccount;
+                        try {
+                            starterAccount = ApplicationContext.getInstance().getAccountService().getAccountByUserId(AuthHolder.totkenUserId);
+                            desAccount = ApplicationContext.getInstance().getAccountService().getAccountByAccountNumber(destAccountNumber);
+                        } catch (Exception e) {
+                            System.out.println("Account not found");
+                            break;
+                        }
+                        if (starterAccount.getBalance() < amount) {
+                            System.out.println(" you don't have enough money");
+                            break;
+                        } else {
+                            //todo watch out for difrence of paya number and account number
+                            try {
+                                double transactionFee = amount * 0.002;
+                                boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount - transactionFee);
+                                boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
+                                if (reducingProcessIsSucess && increasingProcessIsSucess) {
+                                    System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Account not found");
+
+                            }
+                            System.out.println(Message.getFailedMessage("Transfer"));
+                            break;
+                        }
+                    }
                 }
                 case "5": {
                     break moneyTransMenu;
