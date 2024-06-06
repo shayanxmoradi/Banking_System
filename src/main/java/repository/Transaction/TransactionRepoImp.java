@@ -23,22 +23,21 @@ public class TransactionRepoImp implements TransactionRepo {
     @Override
     public boolean addTransaction(Transaction transaction) {
         String insertQuery = """
-                    INSERT INTO transactions (type, transaction_status, amount, sender_user_id, transaction_time, transaction_date, transaction_fee, sender_account_number, receiver_account_number, sender_account_id, reciver_account_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO transactions ( amount, sender_user_id, transaction_time, transaction_date, transaction_fee, sender_account_number, receiver_account_number, sender_account_id, reciver_account_id)
+                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, transaction.getType().name());
-            preparedStatement.setString(2, transaction.getTransactionStatus().name());
-            preparedStatement.setDouble(3, transaction.getAmount());
-            preparedStatement.setLong(4, transaction.getSenderUserId());
-            preparedStatement.setTime(5, java.sql.Time.valueOf(transaction.getTransactionTime()));
-            preparedStatement.setDate(6, java.sql.Date.valueOf(transaction.getTransactionDate()));
-            preparedStatement.setDouble(7, transaction.getTransactionFee());
-            preparedStatement.setString(8, transaction.getSenderAccountNummber());
-            preparedStatement.setString(9, transaction.getReceiverAccountNummber());
-            preparedStatement.setLong(10, transaction.getSenderId());
-            preparedStatement.setLong(11, transaction.getReceiverId());
+//todo fukn type is missing
+            preparedStatement.setDouble(1, transaction.getAmount());
+            preparedStatement.setLong(2, transaction.getSenderUserId());
+            preparedStatement.setTime(3, java.sql.Time.valueOf(transaction.getTransactionTime()));
+            preparedStatement.setDate(4, java.sql.Date.valueOf(transaction.getTransactionDate()));
+            preparedStatement.setDouble(5, transaction.getTransactionFee());
+            preparedStatement.setString(6, transaction.getSenderAccountNummber());
+            preparedStatement.setString(7, transaction.getReceiverAccountNummber());
+            preparedStatement.setLong(8, transaction.getSenderId());
+            preparedStatement.setLong(9, transaction.getReceiverId());
 
             if (preparedStatement.executeUpdate() > 0) {
                 try (var keys = preparedStatement.getGeneratedKeys()) {

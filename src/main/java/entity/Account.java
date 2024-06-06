@@ -100,6 +100,14 @@ public class Account extends BaseEntity {
     }
 
     @Override
+    public Long getId() {
+        if (super.getId() == null) {
+            return 0L;
+        }
+        return super.getId();
+    }
+
+    @Override
     public String toString() {
         return "Account{" +
                "accountName='" + accountName + '\'' +

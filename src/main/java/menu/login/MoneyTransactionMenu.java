@@ -3,6 +3,9 @@ package menu.login;
 import entity.Account;
 import entity.AccountTransaction;
 import entity.CreditCard;
+import entity.transaction.Transaction;
+import entity.transaction.enums.TransactionStatus;
+import entity.transaction.enums.TransactionType;
 import menu.util.Input;
 import menu.util.Message;
 import repository.account.AccountRepoImpl;
@@ -90,6 +93,7 @@ public class MoneyTransactionMenu {
                                 boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount);
                                 boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
                                 if (reducingProcessIsSucess && increasingProcessIsSucess) {
+
                                     System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
                                     break;
                                 }
@@ -123,7 +127,7 @@ public class MoneyTransactionMenu {
                             i--; // Decrement the counter to redo this transaction
                             continue;
                         }
-                     AccountTransaction accountTransaction = new AccountTransaction(destAccountNumber, amount);
+                        AccountTransaction accountTransaction = new AccountTransaction(destAccountNumber, amount);
                         transactions.add(accountTransaction);
                     }
 
@@ -131,11 +135,11 @@ public class MoneyTransactionMenu {
                     try {
                         ApplicationContext.getInstance().getAccountService().performBatchTransactions(AuthHolder.totkenUserId, transactions);
                         System.out.println("Batch transactions completed successfully");
-                        break ;
+                        break;
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.out.println("Failed to complete batch transactions");
-                        break ;
+                        break;
                     }
 
 
@@ -227,10 +231,31 @@ public class MoneyTransactionMenu {
             System.out.println("increasingProcessIsSucess" + increasingProcessIsSucess);
             if (reducingProcessIsSucess && increasingProcessIsSucess) {
                 System.out.println(Message.getSuccessfulMessage(amount + " Card Transfer to " + destAccount.getUserFristName()));
+                // add sucessfull Transaction
+                Transaction transaction = new Transaction(TransactionType.NORMAL, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
+                System.out.println("sender id " + startAccount.getAccountNummber());
+                System.out.println("recvoiiii id " + destAccount.getAccountNummber());
+
+                transaction.setSenderAccountNummber(startAccount.getAccountNummber());
+                transaction.setReceiverAccountNummber(destAccount.getAccountNummber());
+                transaction.setSenderId(startAccount.getId());
+                transaction.setReceiverId(destAccount.getId());
+                transaction.setAmount(amount);
+                ApplicationContext.getInstance().getTransactionService().addTransaction(transaction);
+
                 return true;
             } else System.out.println("unable to transfer money");
         } else
             System.out.println("you are low on your Currency!");
+        Transaction transaction = new Transaction(TransactionType.NORMAL, TransactionStatus.FAILED, amount, AuthHolder.totkenUserId, 0);
+        transaction.setSenderAccountNummber(startAccount.getAccountNummber());
+        transaction.setReceiverAccountNummber(destAccount.getAccountNummber());
+        transaction.setSenderId(startAccount.getId());
+        transaction.setReceiverId(destAccount.getId());
+        transaction.setAmount(amount);
+
+        ApplicationContext.getInstance().getTransactionService().addTransaction(transaction);
+
 
         return false;
     }

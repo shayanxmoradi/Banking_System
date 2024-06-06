@@ -167,6 +167,7 @@ public class CardRepoImpl implements CardRepo {
             account.setBalance(resultSet.getDouble("balance"));
             account.setUserFristName(resultSet.getString("user_first_name"));
             account.setId((long) resultSet.getInt("id"));
+            account.setAccountNummber( resultSet.getString("number"));
             System.out.println("id of retrieved Acc"+resultSet.getInt("id"));
             account.setBankName(resultSet.getString("bank_name_fk"));
         }

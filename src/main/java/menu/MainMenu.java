@@ -10,6 +10,7 @@ public class MainMenu {
     public static void show() throws SQLException {
         meinMenu:
         while (true) {
+
             System.out.println(Message.getMenuName("mainMenu"));
             System.out.println("""
                     Chose an Option

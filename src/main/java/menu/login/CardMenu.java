@@ -3,6 +3,7 @@ package menu.login;
 import entity.CreditCard;
 import entity.User;
 import entity.transaction.Transaction;
+import entity.transaction.enums.TransactionStatus;
 import entity.transaction.enums.TransactionType;
 import menu.SignUpMenu;
 import menu.util.Input;
@@ -51,6 +52,7 @@ public class CardMenu {
                                 CCV2 : %s
                                 Expire Date : %s
                                 """;
+
                         System.out.println(cardDetail.formatted(card.getCardNumber(), card.getCvv(), card.getExpiryDate()));
 
                         break;
