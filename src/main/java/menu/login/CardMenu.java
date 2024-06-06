@@ -8,6 +8,9 @@ import entity.transaction.enums.TransactionType;
 import menu.SignUpMenu;
 import menu.util.Input;
 import menu.util.Message;
+import service.acount.AccountService;
+import service.card.CardService;
+import service.transaction.TransactionService;
 import util.ApplicationContext;
 import util.AuthHolder;
 
@@ -18,7 +21,23 @@ import java.util.Date;
 import java.util.List;
 
 public class CardMenu {
-    public static void show() throws SQLException {
+
+        private final Input INPUT;
+        private final Message MESSAGE;
+        private final AccountService ACCOUNT_SERVICE;
+        private final TransactionService TRANSACTION_SERVICE;
+        private final CardService CARD_SERVICE;
+
+        public CardMenu(Input input, Message message, AccountService accountService, TransactionService transactionService, CardService cardService) {
+            this.INPUT = input;
+            this.MESSAGE = message;
+            this.ACCOUNT_SERVICE = accountService;
+            this.TRANSACTION_SERVICE = transactionService;
+            this.CARD_SERVICE = cardService;
+
+
+        }
+    public  void show() throws SQLException {
         cardMenu:
         while (true) {
             System.out.println("""
@@ -44,7 +63,7 @@ public class CardMenu {
 //                    double balance = Input.scanner.nextDouble();
                     CreditCard card = new CreditCard(accocuntId, cardName);
                     card.setBankName(bankName);
-                    if (ApplicationContext.getInstance().getCardService().addCard(card)) {
+                    if (CARD_SERVICE.addCard(card)) {
                         System.out.println(Message.getSuccessfulMessage("Creating new Card"));
                         String cardDetail = """
                                 Your created Card Information:
@@ -69,7 +88,7 @@ public class CardMenu {
                     CreditCard card = new CreditCard();
                     card.setCardNumber(cardNumber);
                     card.setId(deleteCardId);
-                    if (ApplicationContext.getInstance().getCardService().removeCard(card)) {
+                    if (CARD_SERVICE.removeCard(card)) {
                         System.out.println(Message.getSuccessfulMessage("Deleting Card"));
                         break;
                     }
@@ -80,7 +99,7 @@ public class CardMenu {
                 case "3": {
                     System.out.println(Message.getInputMessage(" Card name, which you are looking for "));
                     String cardName = Input.scanner.next();
-                    CreditCard card = ApplicationContext.getInstance().getCardService().getCardByCardName(cardName);
+                    CreditCard card = CARD_SERVICE.getCardByCardName(cardName);
 
                     if (card != null) {
                         System.out.println(Message.getSuccessfulMessage("Card found"));
@@ -97,11 +116,11 @@ public class CardMenu {
                 case "4": {
                     System.out.println(Message.getInputMessage(" Bank name, which you are looking for Cards "));
                     String bankName = Input.scanner.next();
-                    showAllCards(ApplicationContext.getInstance().getCardService().getCardsByBankName(bankName), "looking for Cards with bank: " + bankName);
+                    showAllCards(CARD_SERVICE.getCardsByBankName(bankName), "looking for Cards with bank: " + bankName);
                     break;
                 }
                 case "5": {
-                    showAllCards(ApplicationContext.getInstance().getCardService().getAllCards(), "any Card");
+                    showAllCards(CARD_SERVICE.getAllCards(), "any Card");
                     break;
                 }
                 case "6": {
@@ -109,7 +128,7 @@ public class CardMenu {
                 }
                 case "7": {
                     System.out.println("here is list of all your Transactions");
-                    System.out.println(ApplicationContext.getInstance().getTransactionService().getTransactionsByUserId(AuthHolder.totkenUserId.intValue()));
+                    System.out.println(TRANSACTION_SERVICE.getTransactionsByUserId(AuthHolder.totkenUserId.intValue()));
                     break;
                 }
 
@@ -124,7 +143,7 @@ public class CardMenu {
         }
     }
 
-    private static void handleFilterTransactoinsView() {
+    private  void handleFilterTransactoinsView() {
         System.out.println("Choose a filter option:");
         System.out.println("1. Filter by type");
         System.out.println("2. Filter by date range");
@@ -159,7 +178,7 @@ public class CardMenu {
                 } catch (Exception e) {
                     break;
                 }
-                filteredTransactions = ApplicationContext.getInstance().getTransactionService().getTransactionsByUserIdWithType(AuthHolder.totkenUserId.intValue(), transactionType);
+            filteredTransactions = TRANSACTION_SERVICE.getTransactionsByUserIdWithType(AuthHolder.totkenUserId.intValue(), transactionType);
                 break;
             case 2:
                 System.out.println("Enter start date (YYYY-MM-DD):");
@@ -169,12 +188,12 @@ public class CardMenu {
                 System.out.println("Enter end date (YYYY-MM-DD):");
                 LocalDate endLocalDate = LocalDate.parse(Input.scanner.nextLine());
                 Date endDate = Date.from(endLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                filteredTransactions = ApplicationContext.getInstance().getTransactionService().getTransactionsByUserIdWithInDate(AuthHolder.totkenUserId.intValue(), startDate, endDate);
+                filteredTransactions = TRANSACTION_SERVICE.getTransactionsByUserIdWithInDate(AuthHolder.totkenUserId.intValue(), startDate, endDate);
                 break;
             case 3:
                 System.out.println("Enter amount:");
                 double amount = Input.scanner.nextDouble();
-                filteredTransactions = ApplicationContext.getInstance().getTransactionService().getTransactionsByUserIdWithAmount(AuthHolder.totkenUserId.intValue(), (float) amount);
+                filteredTransactions = TRANSACTION_SERVICE.getTransactionsByUserIdWithAmount(AuthHolder.totkenUserId.intValue(), (float) amount);
                 break;
             default:
                 System.out.println("Invalid choice.");

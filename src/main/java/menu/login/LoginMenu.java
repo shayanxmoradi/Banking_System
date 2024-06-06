@@ -2,14 +2,28 @@ package menu.login;
 
 import menu.util.Input;
 import menu.util.Message;
+import service.user.UserService;
 import util.ApplicationContext;
 import util.AuthHolder;
 
 import java.sql.SQLException;
 
 public class LoginMenu {
+    private final Input INPUT;
+    private final Message MESSAGE;
+    private final UserService USER_SERVICE;
+    private final AuthHolder AUTH_HOLDER;
+    private final LoggedInMenu LOGGED_IN_MENU;
 
-        public static void show() throws SQLException {
+    public LoginMenu(Input input, Message message, UserService userService, AuthHolder AUTH_HOLDER, LoggedInMenu LOGGED_IN_MENU) {
+        this.INPUT = input;
+        this.MESSAGE = message;
+        this.USER_SERVICE = userService;
+        this.AUTH_HOLDER = AUTH_HOLDER;
+        this.LOGGED_IN_MENU = LOGGED_IN_MENU;
+    }
+
+        public  void show() throws SQLException {
             login:
             while (true) {
 
@@ -17,28 +31,28 @@ public class LoginMenu {
                     1 -> Enter Information
                     2 -> Previous Menu
                     """);
-                switch (Input.scanner.next()) {
+                switch (INPUT.scanner.next()) {
                     case "1": {
-                        System.out.println(Message.getInputMessage("userName"));
-                        String username = Input.scanner.next();
-                        System.out.println(Message.getInputMessage("password"));
-                        String password = Input.scanner.next();
-                        if (ApplicationContext.getInstance().getUserService().login(username, password)) {
-                            System.out.println(Message.getSuccessfulMessage("login "));
+                        System.out.println(MESSAGE.getInputMessage("userName"));
+                        String username = INPUT.scanner.next();
+                        System.out.println(MESSAGE.getInputMessage("password"));
+                        String password = INPUT.scanner.next();
+                        if (USER_SERVICE.login(username, password)) {
+                            System.out.println(MESSAGE.getSuccessfulMessage("login "));
                           //todo sub menu
-                            LoggedInMenu.show();
+                            LOGGED_IN_MENU.show();
                             //todo watchout
-                            AuthHolder.reset();
+                            AUTH_HOLDER.reset();
                             break login;
                         }
-                        System.out.println(Message.getNotFoundMessage(username));
+                        System.out.println(MESSAGE.getNotFoundMessage(username));
                         break;
                     }
                     case "2": {
                         break login;
                     }
                     default:
-                        System.out.println(Message.getInvalidInputMessage());
+                        System.out.println(MESSAGE.getInvalidInputMessage());
                 }
 
             }

@@ -8,7 +8,13 @@ import entity.transaction.enums.TransactionStatus;
 import entity.transaction.enums.TransactionType;
 import menu.util.Input;
 import menu.util.Message;
+import repository.Transaction.TransactionRepo;
+import repository.account.AccountRepo;
 import repository.account.AccountRepoImpl;
+import repository.card.CardRepo;
+import service.acount.AccountService;
+import service.card.CardService;
+import service.transaction.TransactionService;
 import util.ApplicationContext;
 import util.AuthHolder;
 
@@ -17,7 +23,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MoneyTransactionMenu {
-    public static void show() throws SQLException {
+    private final Input INPUT;
+    private final Message MESSAGE;
+    private final AccountService ACCOUNT_SERVICE;
+    private final TransactionService TRANSACTION_SERVICE;
+    private final CardService CARD_SERVICE;
+
+    public MoneyTransactionMenu(Input input, Message message, AccountService accountService, TransactionService transactionService, CardService cardService) {
+        this.INPUT = input;
+        this.MESSAGE = message;
+        this.ACCOUNT_SERVICE = accountService;
+        this.TRANSACTION_SERVICE = transactionService;
+        this.CARD_SERVICE = cardService;
+
+
+
+    }
+    public  void show() throws SQLException {
         moneyTransMenu:
         while (true) {
             System.out.println("""
@@ -29,14 +51,14 @@ public class MoneyTransactionMenu {
                             5 -> Pervious Menu
                     """);
 
-            switch (Input.scanner.next()) {
+            switch (INPUT.scanner.next()) {
                 case "1": {
                     //todo check Fee
                     System.out.println("choose Card you want to use to transfer Money");
-                    List<CreditCard> cardList = showAllCards(ApplicationContext.getInstance().getCardService().getAllCards(), "any Card");
+                    List<CreditCard> cardList = showAllCards(CARD_SERVICE.getAllCards(), "any Card");
                     CreditCard chosedCard;
                     try {
-                        System.out.println(Message.getInputMessage("Card nummber which you want to use "));
+                        System.out.println(MESSAGE.getInputMessage("Card nummber which you want to use "));
                         int pickedCard = Input.scanner.nextInt();
                         chosedCard = cardList.get(pickedCard - 1);
                     } catch (Exception e) {
@@ -44,12 +66,12 @@ public class MoneyTransactionMenu {
                         break;
                     }
 
-                    System.out.println(Message.getInputMessage(Message.getInputMessage(" a Destination Card")));
+                    System.out.println(MESSAGE.getInputMessage(Message.getInputMessage(" a Destination Card")));
                     String destCardNumber = Input.scanner.next();
                     double amount;
                     validAmount:
                     while (true) {
-                        System.out.println(Message.getInputMessage(Message.getInputMessage("Transaction amount under 150")));
+                        System.out.println(MESSAGE.getInputMessage(Message.getInputMessage("Transaction amount under 150")));
                         amount = Input.scanner.nextDouble();
                         if (amount > 0 && amount < 150) {
                             break validAmount;
@@ -74,9 +96,9 @@ public class MoneyTransactionMenu {
                         Account starterAccount;
                         Account desAccount;
                         try {
-                            starterAccount = ApplicationContext.getInstance().getAccountService().getAccountByUserId(AuthHolder.totkenUserId);
+                            starterAccount = ACCOUNT_SERVICE.getAccountByUserId(AuthHolder.totkenUserId);
                             System.out.println("starter account" + starterAccount.getAccountNummber());
-                            desAccount = ApplicationContext.getInstance().getAccountService().getAccountByAccountNumber(destAccountNumber);
+                            desAccount = ACCOUNT_SERVICE.getAccountByAccountNumber(destAccountNumber);
                             System.out.println("des account" + starterAccount.getAccountNummber());
 
                         } catch (Exception e) {
@@ -85,15 +107,31 @@ public class MoneyTransactionMenu {
                         }
                         if (starterAccount.getBalance() < amount) {
                             System.out.println(" you don't have enough money");
+                            Transaction transaction = new Transaction(TransactionType.PAYA, TransactionStatus.FAILED, amount, AuthHolder.totkenUserId, 0);
+
+                            transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
+                            transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
+                            transaction.setSenderId(starterAccount.getId());
+                            transaction.setReceiverId(desAccount.getId());
+                            transaction.setAmount(amount);
+                            TRANSACTION_SERVICE.addTransaction(transaction);
+
                             break;
                         } else {
                             //todo watch out for difrence of paya number and account number
                             try {
 
-                                boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount);
-                                boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
+                                boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount);
+                                boolean increasingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
                                 if (reducingProcessIsSucess && increasingProcessIsSucess) {
+                                    Transaction transaction = new Transaction(TransactionType.PAYA, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
 
+                                    transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
+                                    transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
+                                    transaction.setSenderId(starterAccount.getId());
+                                    transaction.setReceiverId(desAccount.getId());
+                                    transaction.setAmount(amount);
+                                   TRANSACTION_SERVICE.addTransaction(transaction);
                                     System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
                                     break;
                                 }
@@ -107,6 +145,7 @@ public class MoneyTransactionMenu {
                     }
                 }
                 case "3": {
+                    //todo batch is fuped
 
                     System.out.println("How many transactions do you want to perform in batch?");
                     int numberOfTransactions = Input.scanner.nextInt();
@@ -124,16 +163,16 @@ public class MoneyTransactionMenu {
 
                         if (amount < 150 || amount > 500) {
                             System.out.println("Invalid amount. Please enter an amount between 150 and 500.");
-                            i--; // Decrement the counter to redo this transaction
+                            i--;
                             continue;
                         }
                         AccountTransaction accountTransaction = new AccountTransaction(destAccountNumber, amount);
                         transactions.add(accountTransaction);
+
                     }
 
-                    // Perform batch transactions
                     try {
-                        ApplicationContext.getInstance().getAccountService().performBatchTransactions(AuthHolder.totkenUserId, transactions);
+                        ACCOUNT_SERVICE.performBatchTransactions(AuthHolder.totkenUserId, transactions);
                         System.out.println("Batch transactions completed successfully");
                         break;
                     } catch (Exception e) {
@@ -157,22 +196,40 @@ public class MoneyTransactionMenu {
                         Account starterAccount;
                         Account desAccount;
                         try {
-                            starterAccount = ApplicationContext.getInstance().getAccountService().getAccountByUserId(AuthHolder.totkenUserId);
-                            desAccount = ApplicationContext.getInstance().getAccountService().getAccountByAccountNumber(destAccountNumber);
+                            starterAccount = ACCOUNT_SERVICE.getAccountByUserId(AuthHolder.totkenUserId);
+                            desAccount = ACCOUNT_SERVICE.getAccountByAccountNumber(destAccountNumber);
                         } catch (Exception e) {
                             System.out.println("Account not found");
                             break;
                         }
                         if (starterAccount.getBalance() < amount) {
                             System.out.println(" you don't have enough money");
+                            Transaction transaction = new Transaction(TransactionType.SATNA, TransactionStatus.FAILED, amount, AuthHolder.totkenUserId, 0);
+
+                            transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
+                            transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
+                            transaction.setSenderId(starterAccount.getId());
+                            transaction.setReceiverId(desAccount.getId());
+                            transaction.setAmount(amount);
+                          TRANSACTION_SERVICE.addTransaction(transaction);
+                            System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
                             break;
                         } else {
                             //todo watch out for difrence of paya number and account number
                             try {
                                 double transactionFee = amount * 0.002;
-                                boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount - transactionFee);
-                                boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
+                                boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount - transactionFee);
+                                boolean increasingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
                                 if (reducingProcessIsSucess && increasingProcessIsSucess) {
+                                    Transaction transaction = new Transaction(TransactionType.SATNA, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
+
+                                    transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
+                                    transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
+                                    transaction.setSenderId(starterAccount.getId());
+                                    transaction.setReceiverId(desAccount.getId());
+                                    transaction.setAmount(amount);
+                                    TRANSACTION_SERVICE.addTransaction(transaction);
+                                    System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
                                     System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
                                     break;
                                 }
@@ -196,13 +253,13 @@ public class MoneyTransactionMenu {
         }
     }
 
-    private static boolean cardTransaction(String cardName, String destCardNumber, double amount) throws SQLException {
+    private  boolean cardTransaction(String cardName, String destCardNumber, double amount) throws SQLException {
 
         //todo find Account BaseOn CardNummber
 
 
-        Account startAccount = ApplicationContext.getInstance().getCardService().getAccountByCardNumber(cardName);
-        Account destAccount = ApplicationContext.getInstance().getCardService().getAccountByCardNumber(destCardNumber);
+        Account startAccount = CARD_SERVICE.getAccountByCardNumber(cardName);
+        Account destAccount = CARD_SERVICE.getAccountByCardNumber(destCardNumber);
         if (startAccount == null || destAccount == null) {
             System.out.println(Message.getFailedMessage("finding Cards "));
             return false;
@@ -225,23 +282,21 @@ public class MoneyTransactionMenu {
                 }
 
             }
-            boolean reducingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(startAccount.getId(), startAccount.getBalance() - amount - fee);
-            boolean increasingProcessIsSucess = ApplicationContext.getInstance().getAccountService().updateAccountBalance(destAccount.getId(), destAccount.getBalance() + amount);
+            boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(startAccount.getId(), startAccount.getBalance() - amount - fee);
+            boolean increasingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(destAccount.getId(), destAccount.getBalance() + amount);
             System.out.println("reducingProcessIsSucess" + reducingProcessIsSucess);
             System.out.println("increasingProcessIsSucess" + increasingProcessIsSucess);
             if (reducingProcessIsSucess && increasingProcessIsSucess) {
                 System.out.println(Message.getSuccessfulMessage(amount + " Card Transfer to " + destAccount.getUserFristName()));
                 // add sucessfull Transaction
                 Transaction transaction = new Transaction(TransactionType.NORMAL, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
-                System.out.println("sender id " + startAccount.getAccountNummber());
-                System.out.println("recvoiiii id " + destAccount.getAccountNummber());
 
                 transaction.setSenderAccountNummber(startAccount.getAccountNummber());
                 transaction.setReceiverAccountNummber(destAccount.getAccountNummber());
                 transaction.setSenderId(startAccount.getId());
                 transaction.setReceiverId(destAccount.getId());
                 transaction.setAmount(amount);
-                ApplicationContext.getInstance().getTransactionService().addTransaction(transaction);
+                TRANSACTION_SERVICE.addTransaction(transaction);
 
                 return true;
             } else System.out.println("unable to transfer money");
@@ -254,7 +309,7 @@ public class MoneyTransactionMenu {
         transaction.setReceiverId(destAccount.getId());
         transaction.setAmount(amount);
 
-        ApplicationContext.getInstance().getTransactionService().addTransaction(transaction);
+       TRANSACTION_SERVICE.addTransaction(transaction);
 
 
         return false;
