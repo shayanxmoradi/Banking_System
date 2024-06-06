@@ -13,6 +13,7 @@ public interface AccountService {
     boolean updateAccountBalance(Long accountId, double balance);
 Account getAccountById(Long accountId);
     Account getAccountByAccountNumber(String accountNumber);
+    Account getAccountByPayaNumber(String accountNumber);
     Account getAccountByUserId(Long userId);
 
     boolean updateAccount(Account account);

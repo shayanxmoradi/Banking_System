@@ -11,6 +11,7 @@ public interface AccountRepo {
     Account getAccountByAccountName(String accountName);
     Account getAccountByAccountNumber(String accountNumber);
      Account getAccountByUserId(Long userId);
+    Account getAccountByPayaNumber(String accountNumber);
 
         boolean deleteAccount(Account account);
     boolean updateAccount(Account account);

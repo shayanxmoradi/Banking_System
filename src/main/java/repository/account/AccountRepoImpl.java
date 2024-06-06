@@ -210,6 +210,26 @@ public class AccountRepoImpl implements AccountRepo {
     }
 
     @Override
+    public Account getAccountByPayaNumber(String payaNumber) {
+        String selectQuery = "SELECT * FROM account WHERE paya_number = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+            preparedStatement.setString(1, payaNumber);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return extractAccountFromResultSet(resultSet);
+                }
+            }
+        } catch (SQLException sqlE) {
+            sqlE.printStackTrace();
+            throw new RuntimeException("Error fetching account by paya number", sqlE);
+        }
+
+        return null;
+    }
+
+    @Override
     public boolean performBatchTransactions(Long userId, List<AccountTransaction> transactions, double fee) {
         try {
             connection.setAutoCommit(false);
@@ -226,7 +246,7 @@ public class AccountRepoImpl implements AccountRepo {
             }
 
             // Prepare the batch for updating the destination accounts
-            String updateQuery = "UPDATE account SET balance = balance + ? WHERE number = ?";
+            String updateQuery = "UPDATE account SET balance = balance + ? WHERE paya_number = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
                 for (AccountTransaction transaction : transactions) {
                     Account destAccount = getAccountByAccountNumber(transaction.getDestAccountNumber());

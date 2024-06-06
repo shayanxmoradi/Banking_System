@@ -48,6 +48,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account getAccountByPayaNumber(String payaNumber) {
+        return accountRepo.getAccountByPayaNumber(payaNumber);
+    }
+
+    @Override
     public Account getAccountByUserId(Long userId) {
         return accountRepo.getAccountByUserId(userId);
     }

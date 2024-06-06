@@ -53,194 +53,25 @@ public class MoneyTransactionMenu {
 
             switch (INPUT.scanner.next()) {
                 case "1": {
-                    //todo check Fee
-                    System.out.println("choose Card you want to use to transfer Money");
-                    List<CreditCard> cardList = showAllCards(CARD_SERVICE.getAllCards(), "any Card");
-                    CreditCard chosedCard;
-                    try {
-                        System.out.println(MESSAGE.getInputMessage("Card nummber which you want to use "));
-                        int pickedCard = Input.scanner.nextInt();
-                        chosedCard = cardList.get(pickedCard - 1);
-                    } catch (Exception e) {
-                        System.out.println("invalid number");
-                        break;
-                    }
-
-                    System.out.println(MESSAGE.getInputMessage(Message.getInputMessage(" a Destination Card")));
-                    String destCardNumber = Input.scanner.next();
-                    double amount;
-                    validAmount:
-                    while (true) {
-                        System.out.println(MESSAGE.getInputMessage(Message.getInputMessage("Transaction amount under 150")));
-                        amount = Input.scanner.nextDouble();
-                        if (amount > 0 && amount < 150) {
-                            break validAmount;
-                        }
-                        System.out.println("Invalid amount");
-                    }
-                    boolean isSucsesful = cardTransaction(chosedCard.getCardNumber(), destCardNumber, amount);
+                    CardToCardTransaction();
                     break;
                 }
 
                 case "2": {
-                    //todo make picking account like card picker
-                    System.out.println("this is for Transacatino between 150 and 500");
-                    System.out.println(Message.getInputMessage(" Destinatin Account Nummber"));
-                    String destAccountNumber = Input.scanner.next();
-                    System.out.println(Message.getInputMessage("Transaction amount (150-500)"));
-                    double amount = Input.scanner.nextDouble();
-                    if (amount < 150 || amount > 500) {
-                        System.out.println("Invalid amount");
-                        break;
-                    } else {
-                        Account starterAccount;
-                        Account desAccount;
-                        try {
-                            starterAccount = ACCOUNT_SERVICE.getAccountByUserId(AuthHolder.totkenUserId);
-                            System.out.println("starter account" + starterAccount.getAccountNummber());
-                            desAccount = ACCOUNT_SERVICE.getAccountByAccountNumber(destAccountNumber);
-                            System.out.println("des account" + starterAccount.getAccountNummber());
-
-                        } catch (Exception e) {
-                            System.out.println("Account not found");
-                            break;
-                        }
-                        if (starterAccount.getBalance() < amount) {
-                            System.out.println(" you don't have enough money");
-                            Transaction transaction = new Transaction(TransactionType.PAYA, TransactionStatus.FAILED, amount, AuthHolder.totkenUserId, 0);
-
-                            transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
-                            transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
-                            transaction.setSenderId(starterAccount.getId());
-                            transaction.setReceiverId(desAccount.getId());
-                            transaction.setAmount(amount);
-                            TRANSACTION_SERVICE.addTransaction(transaction);
-
-                            break;
-                        } else {
-                            //todo watch out for difrence of paya number and account number
-                            try {
-
-                                boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount);
-                                boolean increasingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
-                                if (reducingProcessIsSucess && increasingProcessIsSucess) {
-                                    Transaction transaction = new Transaction(TransactionType.PAYA, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
-
-                                    transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
-                                    transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
-                                    transaction.setSenderId(starterAccount.getId());
-                                    transaction.setReceiverId(desAccount.getId());
-                                    transaction.setAmount(amount);
-                                   TRANSACTION_SERVICE.addTransaction(transaction);
-                                    System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
-                                    break;
-                                }
-                            } catch (Exception e) {
-                                System.out.println("Account not found");
-
-                            }
-                            System.out.println(Message.getFailedMessage("Transfer"));
-                            break;
-                        }
-                    }
+                    PayaTransaction();
+                    break;
                 }
                 case "3": {
                     //todo batch is fuped
 
-                    System.out.println("How many transactions do you want to perform in batch?");
-                    int numberOfTransactions = Input.scanner.nextInt();
-
-                    List<AccountTransaction> transactions = new ArrayList<>();
-
-                    for (int i = 0; i < numberOfTransactions; i++) {
-                        System.out.println("Transaction " + (i + 1) + " (amount between 150 and 500):");
-
-                        System.out.println(Message.getInputMessage("Destination Account Number"));
-                        String destAccountNumber = Input.scanner.next();
-
-                        System.out.println(Message.getInputMessage("Transaction amount (150-500)"));
-                        double amount = Input.scanner.nextDouble();
-
-                        if (amount < 150 || amount > 500) {
-                            System.out.println("Invalid amount. Please enter an amount between 150 and 500.");
-                            i--;
-                            continue;
-                        }
-                        AccountTransaction accountTransaction = new AccountTransaction(destAccountNumber, amount);
-                        transactions.add(accountTransaction);
-
-                    }
-
-                    try {
-                        ACCOUNT_SERVICE.performBatchTransactions(AuthHolder.totkenUserId, transactions);
-                        System.out.println("Batch transactions completed successfully");
-                        break;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.out.println("Failed to complete batch transactions");
-                        break;
-                    }
+                    batchPayaTransaction();
+                    break;
 
 
                 }
                 case "4": {
-                    System.out.println("SATNA is for Transacatino between 500 and 5000");
-                    System.out.println(Message.getInputMessage(" Destinatin Account Nummber"));
-                    String destAccountNumber = Input.scanner.next();
-                    System.out.println(Message.getInputMessage("Transaction amount (500-5000)"));
-                    double amount = Input.scanner.nextDouble();
-                    if (amount < 500 || amount > 5000) {
-                        System.out.println("Invalid amount");
-                        break;
-                    } else {
-                        Account starterAccount;
-                        Account desAccount;
-                        try {
-                            starterAccount = ACCOUNT_SERVICE.getAccountByUserId(AuthHolder.totkenUserId);
-                            desAccount = ACCOUNT_SERVICE.getAccountByAccountNumber(destAccountNumber);
-                        } catch (Exception e) {
-                            System.out.println("Account not found");
-                            break;
-                        }
-                        if (starterAccount.getBalance() < amount) {
-                            System.out.println(" you don't have enough money");
-                            Transaction transaction = new Transaction(TransactionType.SATNA, TransactionStatus.FAILED, amount, AuthHolder.totkenUserId, 0);
-
-                            transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
-                            transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
-                            transaction.setSenderId(starterAccount.getId());
-                            transaction.setReceiverId(desAccount.getId());
-                            transaction.setAmount(amount);
-                          TRANSACTION_SERVICE.addTransaction(transaction);
-                            System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
-                            break;
-                        } else {
-                            //todo watch out for difrence of paya number and account number
-                            try {
-                                double transactionFee = amount * 0.002;
-                                boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount - transactionFee);
-                                boolean increasingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
-                                if (reducingProcessIsSucess && increasingProcessIsSucess) {
-                                    Transaction transaction = new Transaction(TransactionType.SATNA, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
-
-                                    transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
-                                    transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
-                                    transaction.setSenderId(starterAccount.getId());
-                                    transaction.setReceiverId(desAccount.getId());
-                                    transaction.setAmount(amount);
-                                    TRANSACTION_SERVICE.addTransaction(transaction);
-                                    System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
-                                    System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
-                                    break;
-                                }
-                            } catch (Exception e) {
-                                System.out.println("Account not found");
-
-                            }
-                            System.out.println(Message.getFailedMessage("Transfer"));
-                            break;
-                        }
-                    }
+                    satnaTransaction();
+                    break;
                 }
                 case "5": {
                     break moneyTransMenu;
@@ -251,6 +82,196 @@ public class MoneyTransactionMenu {
             }
 
         }
+    }
+
+    private void satnaTransaction() {
+        System.out.println("SATNA is for Transacatino between 500 and 5000");
+        System.out.println(Message.getInputMessage(" Destinatin Paya Nummber"));
+        String destAccPaya = Input.scanner.next();
+        System.out.println(Message.getInputMessage("Transaction amount (500-5000)"));
+        double amount = Input.scanner.nextDouble();
+        if (amount < 500 || amount > 5000) {
+            System.out.println("Invalid amount");
+            return;
+        } else {
+            Account starterAccount;
+            Account desAccount;
+            try {
+                starterAccount = ACCOUNT_SERVICE.getAccountByUserId(AuthHolder.totkenUserId);
+                desAccount = ACCOUNT_SERVICE.getAccountByPayaNumber(destAccPaya);
+            } catch (Exception e) {
+                System.out.println("Account not found");
+                return;
+            }
+            if (starterAccount.getBalance() < amount) {
+                System.out.println(" you don't have enough money");
+                Transaction transaction = new Transaction(TransactionType.SATNA, TransactionStatus.FAILED, amount, AuthHolder.totkenUserId, 0);
+
+                transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
+                transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
+                transaction.setSenderId(starterAccount.getId());
+                transaction.setReceiverId(desAccount.getId());
+                transaction.setAmount(amount);
+              TRANSACTION_SERVICE.addTransaction(transaction);
+                System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
+                return;
+            } else {
+                //todo watch out for difrence of paya number and account number
+                try {
+                    double transactionFee = amount * 0.002;
+                    boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount - transactionFee);
+                    boolean increasingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
+                    if (reducingProcessIsSucess && increasingProcessIsSucess) {
+                        Transaction transaction = new Transaction(TransactionType.SATNA, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
+
+                        transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
+                        transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
+                        transaction.setSenderId(starterAccount.getId());
+                        transaction.setReceiverId(desAccount.getId());
+                        transaction.setAmount(amount);
+                        TRANSACTION_SERVICE.addTransaction(transaction);
+                        System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
+                        System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
+                        return;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Account not found");
+
+                }
+                System.out.println(Message.getFailedMessage("Transfer"));
+                return;
+            }
+        }
+    }
+
+    private void batchPayaTransaction() {
+        System.out.println("How many transactions do you want to perform in batch?");
+        int numberOfTransactions = Input.scanner.nextInt();
+
+        List<AccountTransaction> transactions = new ArrayList<>();
+
+        for (int i = 0; i < numberOfTransactions; i++) {
+            System.out.println("Transaction " + (i + 1) + " (amount between 150 and 500):");
+
+            System.out.println(Message.getInputMessage("Destination Paya Number"));
+            String desAccountPaya = Input.scanner.next();
+
+            System.out.println(Message.getInputMessage("Transaction amount (150-500)"));
+            double amount = Input.scanner.nextDouble();
+
+            if (amount < 150 || amount > 500) {
+                System.out.println("Invalid amount. Please enter an amount between 150 and 500.");
+                i--;
+                continue;
+            }
+            AccountTransaction accountTransaction = new AccountTransaction(desAccountPaya, amount);
+            transactions.add(accountTransaction);
+
+        }
+
+        try {
+            ACCOUNT_SERVICE.performBatchTransactions(AuthHolder.totkenUserId, transactions);
+            System.out.println("Batch transactions completed successfully");
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Failed to complete batch transactions");
+            return;
+        }
+    }
+
+    private void PayaTransaction() {
+        //todo make picking account like card picker
+        System.out.println("this is for Transacatino between 150 and 500");
+        //todo change this to paya number
+        System.out.println(Message.getInputMessage(" Destinatin Paya Nummber"));
+        String desAccountPaya = Input.scanner.next();
+        System.out.println(Message.getInputMessage("Transaction amount (150-500)"));
+        double amount = Input.scanner.nextDouble();
+        if (amount < 150 || amount > 500) {
+            System.out.println("Invalid amount");
+            return;
+        } else {
+            Account starterAccount;
+            Account desAccount;
+            try {
+                starterAccount = ACCOUNT_SERVICE.getAccountByUserId(AuthHolder.totkenUserId);
+                System.out.println("starter account" + starterAccount.getAccountNummber());
+                desAccount = ACCOUNT_SERVICE.getAccountByPayaNumber(desAccountPaya);
+                System.out.println("des account" + starterAccount.getAccountNummber());
+
+            } catch (Exception e) {
+                System.out.println("Account not found");
+                return;
+            }
+            if (starterAccount.getBalance() < amount) {
+                System.out.println(" you don't have enough money");
+                Transaction transaction = new Transaction(TransactionType.PAYA, TransactionStatus.FAILED, amount, AuthHolder.totkenUserId, 0);
+
+                transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
+                transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
+                transaction.setSenderId(starterAccount.getId());
+                transaction.setReceiverId(desAccount.getId());
+                transaction.setAmount(amount);
+                TRANSACTION_SERVICE.addTransaction(transaction);
+
+                return;
+            } else {
+                //todo watch out for difrence of paya number and account number
+                try {
+
+                    boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount);
+                    boolean increasingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
+                    if (reducingProcessIsSucess && increasingProcessIsSucess) {
+                        Transaction transaction = new Transaction(TransactionType.PAYA, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
+
+                        transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
+                        transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
+                        transaction.setSenderId(starterAccount.getId());
+                        transaction.setReceiverId(desAccount.getId());
+                        transaction.setAmount(amount);
+                       TRANSACTION_SERVICE.addTransaction(transaction);
+                        System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
+                        return;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Account not found");
+
+                }
+                System.out.println(Message.getFailedMessage("Transfer"));
+                return;
+            }
+        }
+    }
+
+    private void CardToCardTransaction() throws SQLException {
+        //todo check Fee
+        System.out.println("choose Card you want to use to transfer Money");
+        List<CreditCard> cardList = showAllCards(CARD_SERVICE.getAllCards(), "any Card");
+        CreditCard chosedCard;
+        try {
+            System.out.println(MESSAGE.getInputMessage("Card nummber which you want to use "));
+            int pickedCard = Input.scanner.nextInt();
+            chosedCard = cardList.get(pickedCard - 1);
+        } catch (Exception e) {
+            System.out.println("invalid number");
+            return;
+        }
+
+        System.out.println(MESSAGE.getInputMessage(Message.getInputMessage(" a Destination Card")));
+        String destCardNumber = Input.scanner.next();
+        double amount;
+        validAmount:
+        while (true) {
+            System.out.println(MESSAGE.getInputMessage(Message.getInputMessage("Transaction amount under 150")));
+            amount = Input.scanner.nextDouble();
+            if (amount > 0 && amount < 150) {
+                break validAmount;
+            }
+            System.out.println("Invalid amount");
+        }
+        boolean isSucsesful = cardTransaction(chosedCard.getCardNumber(), destCardNumber, amount);
+        return;
     }
 
     private  boolean cardTransaction(String cardName, String destCardNumber, double amount) throws SQLException {

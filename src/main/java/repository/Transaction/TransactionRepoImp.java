@@ -226,8 +226,16 @@ public class TransactionRepoImp implements TransactionRepo {
 
     private Transaction createTransactionFromResultSet(ResultSet resultSet) throws SQLException {
         Long id = resultSet.getLong("id");
-        TransactionType type = TransactionType.valueOf(resultSet.getString("type"));
-        TransactionStatus transactionStatus = TransactionStatus.valueOf(resultSet.getString("transaction_status"));
+        TransactionType type;
+        TransactionStatus transactionStatus;
+        try {
+             type = TransactionType.valueOf(resultSet.getString("type"));
+             transactionStatus = TransactionStatus.valueOf(resultSet.getString("transaction_status"));
+
+        }catch (Exception e) {
+            type=TransactionType.NORMAL;
+            transactionStatus=TransactionStatus.SUCCESSFUL;
+        }
         Double amount = resultSet.getDouble("amount");
         Long senderUserId = resultSet.getLong("sender_user_id");
         Time transactionTime = resultSet.getTime("transaction_time");
@@ -240,12 +248,12 @@ public class TransactionRepoImp implements TransactionRepo {
 
         Transaction transaction = new Transaction(type, transactionStatus, amount, senderUserId, transactionTime, transactionFee);
         transaction.setId(id);
-        Instant instant = transactionDate.toInstant();
+       // Instant instant = transactionDate.toInstant();
 
         // Convert Instant to LocalDate using system default time zone
-        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+      //  LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
 
-        transaction.setTransactionDate(localDate);
+       // transaction.setTransactionDate(localDate);
         transaction.setSenderAccountNummber(senderAccountNummber);
         transaction.setReceiverAccountNummber(receiverAccountNummber);
         transaction.setSenderId(senderId);
