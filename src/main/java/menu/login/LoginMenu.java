@@ -12,6 +12,7 @@ public class LoginMenu {
         public static void show() throws SQLException {
             login:
             while (true) {
+
                 System.out.println("""
                     1 -> Enter Information
                     2 -> Previous Menu

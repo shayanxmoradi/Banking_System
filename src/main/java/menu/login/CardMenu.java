@@ -2,12 +2,18 @@ package menu.login;
 
 import entity.CreditCard;
 import entity.User;
+import entity.transaction.Transaction;
+import entity.transaction.enums.TransactionType;
 import menu.SignUpMenu;
 import menu.util.Input;
 import menu.util.Message;
 import util.ApplicationContext;
+import util.AuthHolder;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 public class CardMenu {
@@ -35,7 +41,7 @@ public class CardMenu {
                     String cardName = Input.scanner.next();
 //                    System.out.println(Message.getInputMessage("Your Card initial Balance"));
 //                    double balance = Input.scanner.nextDouble();
-                    CreditCard card = new CreditCard( accocuntId, cardName);
+                    CreditCard card = new CreditCard(accocuntId, cardName);
                     card.setBankName(bankName);
                     if (ApplicationContext.getInstance().getCardService().addCard(card)) {
                         System.out.println(Message.getSuccessfulMessage("Creating new Card"));
@@ -66,7 +72,7 @@ public class CardMenu {
                         break;
                     }
                     System.out.println(Message.getFailedMessage("deleting Card: " + card.getCardNumber()));
-                break ;
+                    break;
                 }
 
                 case "3": {
@@ -97,8 +103,13 @@ public class CardMenu {
                     break;
                 }
                 case "6": {
+                    handleFilterTransactoinsView();
                 }
-                case "7":
+                case "7": {
+                    System.out.println("here is list of all your Transactions");
+                    System.out.println(ApplicationContext.getInstance().getTransactionService().getTransactionsByUserId(AuthHolder.totkenUserId.intValue()));
+                    break;
+                }
 
                 case "8": {
                     break cardMenu;
@@ -109,6 +120,72 @@ public class CardMenu {
             }
 
         }
+    }
+
+    private static void handleFilterTransactoinsView() {
+        System.out.println("Choose a filter option:");
+        System.out.println("1. Filter by type");
+        System.out.println("2. Filter by date range");
+        System.out.println("3. Filter by amount greater than");
+
+        int choice = Input.scanner.nextInt();
+
+        List<Transaction> filteredTransactions = null;
+
+        switch (choice) {
+            case 1:
+                System.out.println("chose Transaction Type");
+                System.out.println("""
+                        1 -> NORMAL
+                        2 ->PAYA
+                        3 -> PAYA_TOGHEHER
+                        4 -> Satna
+                        """);
+                TransactionType transactionType = null;
+                try {
+                    String type = Input.scanner.nextLine();
+                    if (type.equalsIgnoreCase("1")) {
+                        transactionType = TransactionType.NORMAL;
+                    } else if (type.equalsIgnoreCase("2")) {
+                        transactionType = TransactionType.PAYA;
+                    } else if (type.equalsIgnoreCase("3")) {
+                        transactionType = TransactionType.PAYA_TOGHEHER;
+                    } else if (type.equalsIgnoreCase("4")) {
+                        transactionType = TransactionType.SATNA;
+                    }
+
+                } catch (Exception e) {
+                    break;
+                }
+                filteredTransactions = ApplicationContext.getInstance().getTransactionService().getTransactionsByUserIdWithType(AuthHolder.totkenUserId.intValue(), transactionType);
+                break;
+            case 2:
+                System.out.println("Enter start date (YYYY-MM-DD):");
+                LocalDate startLocalDate = LocalDate.parse(Input.scanner.nextLine());
+                Date startDate = Date.from(startLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+                System.out.println("Enter end date (YYYY-MM-DD):");
+                LocalDate endLocalDate = LocalDate.parse(Input.scanner.nextLine());
+                Date endDate = Date.from(endLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                filteredTransactions = ApplicationContext.getInstance().getTransactionService().getTransactionsByUserIdWithInDate(AuthHolder.totkenUserId.intValue(), startDate, endDate);
+                break;
+            case 3:
+                System.out.println("Enter amount:");
+                double amount = Input.scanner.nextDouble();
+                filteredTransactions = ApplicationContext.getInstance().getTransactionService().getTransactionsByUserIdWithAmount(AuthHolder.totkenUserId.intValue(), (float) amount);
+                break;
+            default:
+                System.out.println("Invalid choice.");
+                break;
+        }
+
+        if (filteredTransactions != null) {
+            System.out.println("Filtered Transactions:");
+            filteredTransactions.forEach(System.out::println);
+        } else {
+            System.out.println("No transactions found.");
+        }
+
     }
 
     private static void showAllCards(List<CreditCard> AllCards, String any_Card) throws SQLException {

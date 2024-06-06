@@ -19,9 +19,12 @@ public class MainMenu {
                     """);
 
             switch (Input.scanner.next()) {
-                case "1"-> SignUpMenu.show();
+                case "1" -> SignUpMenu.show();
                 case "2" -> LoginMenu.show();
-                case "3" -> System.exit(0);
+                case "3" -> {
+                    Input.scanner.close();
+                    System.exit(0);
+                }
                 default -> System.out.println(Message.getInvalidInputMessage());
             }
 

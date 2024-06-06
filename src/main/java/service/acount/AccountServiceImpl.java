@@ -1,7 +1,11 @@
 package service.acount;
 
 import entity.Account;
+import entity.AccountTransaction;
 import repository.account.AccountRepo;
+import repository.account.AccountRepoImpl;
+
+import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
     private final AccountRepo accountRepo;
@@ -51,5 +55,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean updateAccount(Account account) {
         return accountRepo.updateAccount(account);
+    }
+
+    @Override
+    public boolean performBatchTransactions(Long userId, List<AccountTransaction> transactions) {
+        double totalFee = transactions.size() <= 10 ? 12000 : 12000 + (transactions.size() - 10) * 1200;
+       return accountRepo.performBatchTransactions(userId, transactions,totalFee);
     }
 }

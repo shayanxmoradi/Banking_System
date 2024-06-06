@@ -1,6 +1,10 @@
 package service.acount;
 
 import entity.Account;
+import entity.AccountTransaction;
+import repository.account.AccountRepoImpl;
+
+import java.util.List;
 
 public interface AccountService {
     boolean createAccount(Account account);
@@ -12,4 +16,6 @@ Account getAccountById(Long accountId);
     Account getAccountByUserId(Long userId);
 
     boolean updateAccount(Account account);
+    boolean  performBatchTransactions(Long userId, List<AccountTransaction> transactions);
+
 }

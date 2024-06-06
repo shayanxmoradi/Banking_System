@@ -1,10 +1,12 @@
 package repository.account;
 
 import entity.Account;
+import entity.AccountTransaction;
 import org.jetbrains.annotations.NotNull;
 import util.AuthHolder;
 
 import java.sql.*;
+import java.util.List;
 
 
 public class AccountRepoImpl implements AccountRepo {
@@ -17,10 +19,10 @@ public class AccountRepoImpl implements AccountRepo {
     @Override
     public Account addAccount(Account account) {
         String insertQuery = """
-                            INSERT INTO account(user_id_fk, user_first_name, name, number, paya_number,
-                                                bank_id_fk, bank_name_fk, balance)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                            """;
+                INSERT INTO account(user_id_fk, user_first_name, name, number, paya_number,
+                                    bank_id_fk, bank_name_fk, balance)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery,
                 PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -177,7 +179,7 @@ public class AccountRepoImpl implements AccountRepo {
         String bankName = resultSet.getString("bank_name_fk");
         Double balance = resultSet.getDouble("balance");
 
-        Account account = new Account( accountName, bankId, bankName, balance);
+        Account account = new Account(accountName, bankId, bankName, balance);
         account.setId(id);
         account.setAccountNummber(accountNumber);
         account.setPayaNummber(payaNumber);
@@ -186,6 +188,7 @@ public class AccountRepoImpl implements AccountRepo {
 
         return account;
     }
+
     @Override
     public Account getAccountByUserId(Long userId) {
         String selectQuery = "SELECT * FROM account WHERE user_id_fk = ?";
@@ -205,4 +208,65 @@ public class AccountRepoImpl implements AccountRepo {
 
         return null;
     }
+
+    @Override
+    public boolean performBatchTransactions(Long userId, List<AccountTransaction> transactions, double fee) {
+        try {
+            connection.setAutoCommit(false);
+
+            // Fetch the starter account
+            Account starterAccount = getAccountByUserId(userId);
+
+            // Deduct the total amount and fee from the starter account
+            double totalAmount = transactions.stream().mapToDouble(AccountTransaction::getAmount).sum();
+            boolean reducingProcessIsSuccess = updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - totalAmount - fee);
+
+            if (!reducingProcessIsSuccess) {
+                throw new RuntimeException("Failed to deduct the amount from the starter account");
+            }
+
+            // Prepare the batch for updating the destination accounts
+            String updateQuery = "UPDATE account SET balance = balance + ? WHERE number = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+                for (AccountTransaction transaction : transactions) {
+                    Account destAccount = getAccountByAccountNumber(transaction.getDestAccountNumber());
+                    if (destAccount == null) {
+                        throw new RuntimeException("Destination account not found: " + transaction.getDestAccountNumber());
+                    }
+
+                    preparedStatement.setDouble(1, transaction.getAmount());
+                    preparedStatement.setString(2, transaction.getDestAccountNumber());
+                    preparedStatement.addBatch();
+                }
+
+                // Execute batch update
+                int[] updateCounts = preparedStatement.executeBatch();
+                for (int count : updateCounts) {
+                    if (count != 1) {
+                        throw new RuntimeException("Failed to update a destination account balance");
+                    }
+                }
+            }
+
+            // Commit the transaction
+            connection.commit();
+            return true;
+
+        } catch (SQLException | RuntimeException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
+            }
+            throw new RuntimeException("Batch transfer failed", e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }

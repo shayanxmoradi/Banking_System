@@ -1,8 +1,10 @@
 package repository.account;
 
 import entity.Account;
+import entity.AccountTransaction;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface AccountRepo {
     Account addAccount(Account account);
@@ -14,4 +16,5 @@ public interface AccountRepo {
     boolean updateAccount(Account account);
     boolean updateAccountBalance(Long accountId, double balance);
     Account getAccountById(Long accountId);
+  boolean  performBatchTransactions(Long userId, List<AccountTransaction> transactions, double fee);
 }

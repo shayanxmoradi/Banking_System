@@ -1,6 +1,9 @@
 package util;
 
 import config.DataSource;
+import entity.transaction.Transaction;
+import repository.Transaction.TransactionRepo;
+import repository.Transaction.TransactionRepoImp;
 import repository.account.AccountRepo;
 import repository.account.AccountRepoImpl;
 import repository.card.CardRepo;
@@ -11,6 +14,8 @@ import service.acount.AccountService;
 import service.acount.AccountServiceImpl;
 import service.card.CardService;
 import service.card.CardServiceImpl;
+import service.transaction.TransactionService;
+import service.transaction.TransactionServiceImpl;
 import service.user.UserService;
 import service.user.UserServiceImpl;
 
@@ -22,6 +27,7 @@ public class ApplicationContext {
     private static final UserService userService;
     private static final AccountService accountService;
     private static final CardService cardService;
+    private static final TransactionService transactionService;
 
     private ApplicationContext() {
     }
@@ -36,10 +42,12 @@ public class ApplicationContext {
         UserRepo userRepo = new UserRepoImpl(connection);
         AccountRepo accountRepo = new AccountRepoImpl(connection);
         CardRepo cardRepo = new CardRepoImpl(connection);
+        TransactionRepo transactionRepo = new TransactionRepoImp(connection);
 
         accountService = new AccountServiceImpl(accountRepo);
         cardService = new CardServiceImpl(cardRepo);
         userService = new UserServiceImpl(userRepo, accountService);
+        transactionService = new TransactionServiceImpl(transactionRepo);
 
 
         // UserRepository userRepository=new UserRepositoryImpl(connection);
@@ -59,6 +67,9 @@ public class ApplicationContext {
     }
     public AccountService getAccountService () {
         return accountService;
+    }
+    public TransactionService getTransactionService () {
+        return transactionService;
     }
 
 }
