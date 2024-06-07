@@ -8,6 +8,7 @@ import util.AuthHolder;
 import java.sql.*;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -244,23 +245,19 @@ public class TransactionRepoImp implements TransactionRepo {
         }
         Double amount = resultSet.getDouble("amount");
         Long senderUserId = resultSet.getLong("sender_user_id");
-        Time transactionTime = resultSet.getTime("transaction_time");
-        Date transactionDate = resultSet.getDate("transaction_date");
+        LocalTime transactionTime = resultSet.getTime("transaction_time").toLocalTime();
+        LocalDate transactionDate = resultSet.getDate("transaction_date").toLocalDate();
         double transactionFee = resultSet.getDouble("transaction_fee");
         String senderAccountNummber = resultSet.getString("sender_account_number");
         String receiverAccountNummber = resultSet.getString("receiver_account_number");
         Long senderId = resultSet.getLong("sender_account_id");
         Long receiverId = resultSet.getLong("reciver_account_id");
 
-        Transaction transaction = new Transaction(type, transactionStatus, amount, senderUserId, transactionTime, transactionFee);
+        Transaction transaction = new Transaction(type, transactionStatus, amount, senderUserId,  transactionFee);
         transaction.setId(id);
-
-        // Instant instant = transactionDate.toInstant();
-
-        // Convert Instant to LocalDate using system default time zone
-        //  LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
-
-        // transaction.setTransactionDate(localDate);
+        transaction.setTransactionDate(transactionDate);
+        transaction.setTransactionDate(transactionDate);
+        transaction.setTransactionTime(transactionTime);
 
         transaction.setSenderAccountNummber(senderAccountNummber);
         transaction.setReceiverAccountNummber(receiverAccountNummber);

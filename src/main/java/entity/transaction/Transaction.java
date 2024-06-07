@@ -33,9 +33,6 @@ public  class Transaction extends BaseEntity {
         this.transactionTime= LocalTime.now();
     }
 
-    public Transaction(TransactionType type, TransactionStatus transactionStatus, Double amount, Long senderUserId, Time transactionTime, double transactionFee) {
-        super();
-    }
 
     public TransactionType getType() {
         return type;
