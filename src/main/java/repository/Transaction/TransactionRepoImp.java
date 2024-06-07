@@ -23,8 +23,12 @@ public class TransactionRepoImp implements TransactionRepo {
     @Override
     public boolean addTransaction(Transaction transaction) {
         String insertQuery = """
-                    INSERT INTO transactions ( amount, sender_user_id, transaction_time, transaction_date, transaction_fee, sender_account_number, receiver_account_number, sender_account_id, reciver_account_id)
-                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO transactions ( amount, sender_user_id, transaction_time, transaction_date, 
+                              transaction_fee, sender_account_number, receiver_account_number, sender_account_id, 
+                              reciver_account_id,type,transaction_status)
+                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?,cast(? as transaction_type_enum)
+                                                       ,cast(? as transaction_status_enum)
+                                                        )
                 """;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -38,6 +42,8 @@ public class TransactionRepoImp implements TransactionRepo {
             preparedStatement.setString(7, transaction.getReceiverAccountNummber());
             preparedStatement.setLong(8, transaction.getSenderId());
             preparedStatement.setLong(9, transaction.getReceiverId());
+            preparedStatement.setString(10, transaction.getType().name());
+            preparedStatement.setString(11, transaction.getTransactionStatus().name());
 
             if (preparedStatement.executeUpdate() > 0) {
                 try (var keys = preparedStatement.getGeneratedKeys()) {
@@ -229,12 +235,12 @@ public class TransactionRepoImp implements TransactionRepo {
         TransactionType type;
         TransactionStatus transactionStatus;
         try {
-             type = TransactionType.valueOf(resultSet.getString("type"));
-             transactionStatus = TransactionStatus.valueOf(resultSet.getString("transaction_status"));
+            type = TransactionType.valueOf(resultSet.getString("type"));
+            transactionStatus = TransactionStatus.valueOf(resultSet.getString("transaction_status"));
 
-        }catch (Exception e) {
-            type=TransactionType.NORMAL;
-            transactionStatus=TransactionStatus.SUCCESSFUL;
+        } catch (Exception e) {
+            type = TransactionType.NORMAL;
+            transactionStatus = TransactionStatus.SUCCESSFUL;
         }
         Double amount = resultSet.getDouble("amount");
         Long senderUserId = resultSet.getLong("sender_user_id");
@@ -244,21 +250,22 @@ public class TransactionRepoImp implements TransactionRepo {
         String senderAccountNummber = resultSet.getString("sender_account_number");
         String receiverAccountNummber = resultSet.getString("receiver_account_number");
         Long senderId = resultSet.getLong("sender_account_id");
-        Long receiverId = resultSet.getLong("reciver_account_id");
+        Long receiverId = resultSet.getLong("reciver_acc;ount_id");
 
         Transaction transaction = new Transaction(type, transactionStatus, amount, senderUserId, transactionTime, transactionFee);
         transaction.setId(id);
-       // Instant instant = transactionDate.toInstant();
+        // Instant instant = transactionDate.toInstant();
 
         // Convert Instant to LocalDate using system default time zone
-      //  LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        //  LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
 
-       // transaction.setTransactionDate(localDate);
+        // transaction.setTransactionDate(localDate);
         transaction.setSenderAccountNummber(senderAccountNummber);
         transaction.setReceiverAccountNummber(receiverAccountNummber);
         transaction.setSenderId(senderId);
         transaction.setReceiverId(receiverId);
-
+        transaction.setType(type);
+        transaction.setTransactionStatus(transactionStatus);
         return transaction;
     }
 }
