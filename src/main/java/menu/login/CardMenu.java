@@ -1,5 +1,6 @@
 package menu.login;
 
+import entity.Account;
 import entity.CreditCard;
 import entity.User;
 import entity.transaction.Transaction;
@@ -90,9 +91,11 @@ public class CardMenu {
     }
 
     private void registerCard() throws SQLException {
+
         System.out.println(MESSAGE.getInputMessage("Your Card name"));
         String cardName = INPUT.scanner.next();
-        CreditCard card = new CreditCard(1L, cardName);
+       Account account =ACCOUNT_SERVICE.getAccountByUserId(AuthHolder.totkenUserId);
+        CreditCard card = new CreditCard(account.getId(), cardName);
         card.setBankName("sparksasse");
         if (CARD_SERVICE.addCard(card)) {
             System.out.println(MESSAGE.getSuccessfulMessage("Creating new Card"));
