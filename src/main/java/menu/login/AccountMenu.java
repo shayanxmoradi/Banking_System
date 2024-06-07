@@ -22,8 +22,7 @@ public class AccountMenu {
         this.USER_SERVICE = userService;
 
     }
-
-    public  void show() throws SQLException {
+    public  void show() {
         accountMenu:
         while (true) {
             System.out.println("""
@@ -69,7 +68,6 @@ public class AccountMenu {
                 }
                 default:
                     System.out.println(Message.getInvalidInputMessage());
-
             }
 
         }

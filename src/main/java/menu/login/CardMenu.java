@@ -34,10 +34,7 @@ public class CardMenu {
         this.ACCOUNT_SERVICE = accountService;
         this.TRANSACTION_SERVICE = transactionService;
         this.CARD_SERVICE = cardService;
-
-
     }
-
     public void show() throws SQLException {
         cardMenu:
         while (true) {

@@ -22,41 +22,39 @@ public class LoginMenu {
         this.AUTH_HOLDER = AUTH_HOLDER;
         this.LOGGED_IN_MENU = LOGGED_IN_MENU;
     }
+    public void show() throws SQLException {
+        login:
+        while (true) {
 
-        public  void show() throws SQLException {
-            login:
-            while (true) {
-
-                System.out.println("""
+            System.out.println("""
                     1 -> Enter Information
                     2 -> Previous Menu
                     """);
-                switch (INPUT.scanner.next()) {
-                    case "1": {
-                        System.out.println(MESSAGE.getInputMessage("userName"));
-                        String username = INPUT.scanner.next();
-                        System.out.println(MESSAGE.getInputMessage("password"));
-                        String password = INPUT.scanner.next();
-                        if (USER_SERVICE.login(username, password)) {
-                            System.out.println(MESSAGE.getSuccessfulMessage("login "));
-                          //todo sub menu
-                            LOGGED_IN_MENU.show();
-                            //todo watchout
-                            AUTH_HOLDER.reset();
-                            break login;
-                        }
-                        System.out.println(MESSAGE.getNotFoundMessage(username));
-                        break;
-                    }
-                    case "2": {
+            switch (INPUT.scanner.next()) {
+                case "1": {
+                    System.out.println(MESSAGE.getInputMessage("userName"));
+                    String username = INPUT.scanner.next();
+                    System.out.println(MESSAGE.getInputMessage("password"));
+                    String password = INPUT.scanner.next();
+                    if (USER_SERVICE.login(username, password)) {
+                        System.out.println(MESSAGE.getSuccessfulMessage("login "));
+                        //todo sub menu
+                        LOGGED_IN_MENU.show();
+                        //todo watchout
+                        AUTH_HOLDER.reset();
                         break login;
                     }
-                    default:
-                        System.out.println(MESSAGE.getInvalidInputMessage());
+                    System.out.println(MESSAGE.getNotFoundMessage(username));
+                    break;
                 }
-
+                case "2": {
+                    break login;
+                }
+                default:
+                    System.out.println(MESSAGE.getInvalidInputMessage());
             }
 
-
         }
+
+    }
 }

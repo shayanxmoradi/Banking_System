@@ -37,9 +37,9 @@ public class MoneyTransactionMenu {
         this.CARD_SERVICE = cardService;
 
 
-
     }
-    public  void show() throws SQLException {
+
+    public void show() throws SQLException {
         moneyTransMenu:
         while (true) {
             System.out.println("""
@@ -112,7 +112,7 @@ public class MoneyTransactionMenu {
                 transaction.setSenderId(starterAccount.getId());
                 transaction.setReceiverId(desAccount.getId());
                 transaction.setAmount(amount);
-              TRANSACTION_SERVICE.addTransaction(transaction);
+                TRANSACTION_SERVICE.addTransaction(transaction);
                 System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
                 return;
             } else {
@@ -230,7 +230,7 @@ public class MoneyTransactionMenu {
                         transaction.setSenderId(starterAccount.getId());
                         transaction.setReceiverId(desAccount.getId());
                         transaction.setAmount(amount);
-                       TRANSACTION_SERVICE.addTransaction(transaction);
+                        TRANSACTION_SERVICE.addTransaction(transaction);
                         System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
                         return;
                     }
@@ -274,7 +274,7 @@ public class MoneyTransactionMenu {
         return;
     }
 
-    private  boolean cardTransaction(String cardName, String destCardNumber, double amount) throws SQLException {
+    private boolean cardTransaction(String cardName, String destCardNumber, double amount) throws SQLException {
 
         //todo find Account BaseOn CardNummber
 
@@ -330,7 +330,7 @@ public class MoneyTransactionMenu {
         transaction.setReceiverId(destAccount.getId());
         transaction.setAmount(amount);
 
-       TRANSACTION_SERVICE.addTransaction(transaction);
+        TRANSACTION_SERVICE.addTransaction(transaction);
 
 
         return false;

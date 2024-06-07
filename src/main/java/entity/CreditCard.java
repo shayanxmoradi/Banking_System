@@ -8,28 +8,26 @@ public class CreditCard extends BaseEntity {
     private String cardNumber;
     private LocalDate expiryDate;
     private Integer cvv;
-   // private double balance;
     private Long accountId;
     private boolean isActive = true;
     private String cardName;
     private String bankName;
 
-    public CreditCard( Long accountId,String cardName) {
+    public CreditCard(Long accountId, String cardName) {
 
         this.cardNumber = RandomGenerator.generateRandomCardNumber();
         this.expiryDate = RandomGenerator.generateExpireDate();
         this.cvv = RandomGenerator.generateRandomCCV2();
-      //  this.balance = balance;
         this.accountId = accountId;
         this.cardName = cardName;
     }
 
-    public CreditCard(){}
+    public CreditCard() {
+    }
 
     public String getCardNumber() {
         return cardNumber;
     }
-
 
 
     public Integer getCvv() {
@@ -39,8 +37,6 @@ public class CreditCard extends BaseEntity {
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
-
-
 
     public Long getAccountId() {
         return accountId;
@@ -65,7 +61,6 @@ public class CreditCard extends BaseEntity {
     public void setCvv(Integer cvv) {
         this.cvv = cvv;
     }
-
 
 
     public void setAccountId(Long accountId) {
