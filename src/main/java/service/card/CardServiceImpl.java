@@ -51,5 +51,10 @@ public class CardServiceImpl implements CardService {
         return cardRepo.getAccountByCardNumber(cardNumber);
     }
 
+    @Override
+    public CreditCard getCardByNumber(String number) throws SQLException {
+        return cardRepo.getCardByNumber(number);
+    }
+
 
 }

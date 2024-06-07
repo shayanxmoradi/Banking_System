@@ -15,6 +15,7 @@ public interface CardService {
     CreditCard getCardByAccountName(String accountName);
     List<CreditCard> getCardsByBankName(String bankName) throws SQLException;
     Account getAccountByCardNumber(String cardNumber) throws SQLException;
+    CreditCard getCardByNumber(String number) throws SQLException;
 
 
 

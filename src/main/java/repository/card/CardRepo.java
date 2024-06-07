@@ -12,6 +12,7 @@ public interface CardRepo {
     boolean removeCard(CreditCard card) throws SQLException;
 
     CreditCard getCardByName(String name) throws SQLException;
+    CreditCard getCardByNumber(String number) throws SQLException;
 
     List<CreditCard> getCardsByBankName(String bankName) throws SQLException;
 

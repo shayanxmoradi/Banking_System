@@ -90,6 +90,31 @@ public class CardRepoImpl implements CardRepo {
     }
 
     @Override
+    public CreditCard getCardByNumber(String number) throws SQLException {
+        String selectQuery = """
+                                select * from card  
+                where number = ? AND user_id_fk =?
+                                """;
+        PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+        preparedStatement.setString(1, number.toLowerCase());
+        preparedStatement.setInt(2, AuthHolder.totkenUserId.intValue());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            CreditCard card = new CreditCard();
+            card.setCardNumber(resultSet.getString("number"));
+            card.setActive(resultSet.getBoolean("is_active"));
+            card.setAccountId(resultSet.getLong("account_id_fk"));
+            card.setCardName(resultSet.getString("name"));
+            card.setExpiryDate(resultSet.getDate("expire_date").toLocalDate());
+            card.setCvv(resultSet.getInt("ccv2"));
+            card.setId((long)resultSet.getInt("id"));
+            return card;
+        }
+        return null;
+    }
+
+
+    @Override
     public List<CreditCard> getCardsByBankName(String bankName) throws SQLException {
         String selectQuery = """
                                 select * from card  
@@ -167,8 +192,8 @@ public class CardRepoImpl implements CardRepo {
             account.setBalance(resultSet.getDouble("balance"));
             account.setUserFristName(resultSet.getString("user_first_name"));
             account.setId((long) resultSet.getInt("id"));
-            account.setAccountNummber( resultSet.getString("number"));
-            System.out.println("id of retrieved Acc"+resultSet.getInt("id"));
+            account.setAccountNummber(resultSet.getString("number"));
+            System.out.println("id of retrieved Acc" + resultSet.getInt("id"));
             account.setBankName(resultSet.getString("bank_name_fk"));
         }
         return account;
