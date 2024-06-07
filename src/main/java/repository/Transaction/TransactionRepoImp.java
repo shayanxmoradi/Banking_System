@@ -250,16 +250,18 @@ public class TransactionRepoImp implements TransactionRepo {
         String senderAccountNummber = resultSet.getString("sender_account_number");
         String receiverAccountNummber = resultSet.getString("receiver_account_number");
         Long senderId = resultSet.getLong("sender_account_id");
-        Long receiverId = resultSet.getLong("reciver_acc;ount_id");
+        Long receiverId = resultSet.getLong("reciver_account_id");
 
         Transaction transaction = new Transaction(type, transactionStatus, amount, senderUserId, transactionTime, transactionFee);
         transaction.setId(id);
+
         // Instant instant = transactionDate.toInstant();
 
         // Convert Instant to LocalDate using system default time zone
         //  LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
 
         // transaction.setTransactionDate(localDate);
+
         transaction.setSenderAccountNummber(senderAccountNummber);
         transaction.setReceiverAccountNummber(receiverAccountNummber);
         transaction.setSenderId(senderId);
