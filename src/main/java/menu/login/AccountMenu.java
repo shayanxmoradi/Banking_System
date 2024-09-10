@@ -22,7 +22,8 @@ public class AccountMenu {
         this.USER_SERVICE = userService;
 
     }
-    public  void show() {
+
+    public void show() {
         accountMenu:
         while (true) {
             System.out.println("""

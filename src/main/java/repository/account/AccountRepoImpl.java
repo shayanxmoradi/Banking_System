@@ -11,9 +11,11 @@ import java.util.List;
 
 public class AccountRepoImpl implements AccountRepo {
     private final Connection connection;
+    private final AuthHolder AUTH_HOLDER;
 
-    public AccountRepoImpl(Connection connection) {
+    public AccountRepoImpl(Connection connection, AuthHolder AUTH_HOLDER) {
         this.connection = connection;
+        this.AUTH_HOLDER = AUTH_HOLDER;
     }
 
     @Override
@@ -26,8 +28,8 @@ public class AccountRepoImpl implements AccountRepo {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery,
                 PreparedStatement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, AuthHolder.totkenUserId.intValue());
-            preparedStatement.setString(2, AuthHolder.tokenUsername);
+            preparedStatement.setInt(1, AUTH_HOLDER.getTotkenUserId().intValue());
+            preparedStatement.setString(2, AUTH_HOLDER.getTokenUsername());
             preparedStatement.setString(3, account.getAccountName());
             preparedStatement.setString(4, account.getAccountNummber());
             preparedStatement.setString(5, account.getPayaNummber());

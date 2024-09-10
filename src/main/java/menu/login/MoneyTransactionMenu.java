@@ -28,14 +28,15 @@ public class MoneyTransactionMenu {
     private final AccountService ACCOUNT_SERVICE;
     private final TransactionService TRANSACTION_SERVICE;
     private final CardService CARD_SERVICE;
+    private final AuthHolder AUTH_HOLDER;
 
-    public MoneyTransactionMenu(Input input, Message message, AccountService accountService, TransactionService transactionService, CardService cardService) {
+    public MoneyTransactionMenu(Input input, Message message, AccountService accountService, TransactionService transactionService, CardService cardService, AuthHolder authHolder) {
         this.INPUT = input;
         this.MESSAGE = message;
         this.ACCOUNT_SERVICE = accountService;
         this.TRANSACTION_SERVICE = transactionService;
         this.CARD_SERVICE = cardService;
-
+        this.AUTH_HOLDER = authHolder;
 
     }
 
@@ -97,7 +98,7 @@ public class MoneyTransactionMenu {
             Account starterAccount;
             Account desAccount;
             try {
-                starterAccount = ACCOUNT_SERVICE.getAccountByUserId(AuthHolder.totkenUserId);
+                starterAccount = ACCOUNT_SERVICE.getAccountByUserId(AUTH_HOLDER.getTotkenUserId());
                 desAccount = ACCOUNT_SERVICE.getAccountByPayaNumber(destAccPaya);
             } catch (Exception e) {
                 System.out.println("Account not found");
@@ -105,7 +106,7 @@ public class MoneyTransactionMenu {
             }
             if (starterAccount.getBalance() < amount) {
                 System.out.println(" you don't have enough money");
-                Transaction transaction = new Transaction(TransactionType.SATNA, TransactionStatus.FAILED, amount, AuthHolder.totkenUserId, 0);
+                Transaction transaction = new Transaction(TransactionType.SATNA, TransactionStatus.FAILED, amount, AUTH_HOLDER.getTotkenUserId(), 0);
 
                 transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
                 transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
@@ -116,13 +117,12 @@ public class MoneyTransactionMenu {
                 System.out.println(Message.getSuccessfulMessage("Transfer was sucessfull"));
                 return;
             } else {
-                //todo watch out for difrence of paya number and account number
                 try {
                     double transactionFee = amount * 0.002;
                     boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount - transactionFee);
                     boolean increasingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
                     if (reducingProcessIsSucess && increasingProcessIsSucess) {
-                        Transaction transaction = new Transaction(TransactionType.SATNA, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
+                        Transaction transaction = new Transaction(TransactionType.SATNA, TransactionStatus.SUCCESSFUL, amount, AUTH_HOLDER.getTotkenUserId(), transactionFee);
 
                         transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
                         transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
@@ -146,6 +146,7 @@ public class MoneyTransactionMenu {
 
     private void batchPayaTransaction() {
         System.out.println("How many transactions do you want to perform in batch?");
+        double fee;
         int numberOfTransactions = Input.scanner.nextInt();
 
         List<AccountTransaction> transactions = new ArrayList<>();
@@ -164,13 +165,19 @@ public class MoneyTransactionMenu {
                 i--;
                 continue;
             }
-            AccountTransaction accountTransaction = new AccountTransaction(desAccountPaya, amount);
+            if (numberOfTransactions <= 10) {
+                fee = (1200 / numberOfTransactions);
+            } else {
+                fee = 1200 + (numberOfTransactions * (numberOfTransactions - 10));
+            }
+
+            AccountTransaction accountTransaction = new AccountTransaction(desAccountPaya, amount, fee);
             transactions.add(accountTransaction);
 
         }
 
         try {
-            ACCOUNT_SERVICE.performBatchTransactions(AuthHolder.totkenUserId, transactions);
+            ACCOUNT_SERVICE.performBatchTransactions(AUTH_HOLDER.getTotkenUserId(), transactions);
             System.out.println("Batch transactions completed successfully");
             return;
         } catch (Exception e) {
@@ -181,9 +188,7 @@ public class MoneyTransactionMenu {
     }
 
     private void PayaTransaction() {
-        //todo make picking account like card picker
         System.out.println("this is for Transacatino between 150 and 500");
-        //todo change this to paya number
         System.out.println(Message.getInputMessage(" Destinatin Paya Nummber"));
         String desAccountPaya = Input.scanner.next();
         System.out.println(Message.getInputMessage("Transaction amount (150-500)"));
@@ -195,7 +200,7 @@ public class MoneyTransactionMenu {
             Account starterAccount;
             Account desAccount;
             try {
-                starterAccount = ACCOUNT_SERVICE.getAccountByUserId(AuthHolder.totkenUserId);
+                starterAccount = ACCOUNT_SERVICE.getAccountByUserId(AUTH_HOLDER.getTotkenUserId());
                 System.out.println("starter account" + starterAccount.getAccountNummber());
                 desAccount = ACCOUNT_SERVICE.getAccountByPayaNumber(desAccountPaya);
                 System.out.println("des account" + starterAccount.getAccountNummber());
@@ -206,7 +211,7 @@ public class MoneyTransactionMenu {
             }
             if (starterAccount.getBalance() < amount) {
                 System.out.println(" you don't have enough money");
-                Transaction transaction = new Transaction(TransactionType.PAYA, TransactionStatus.FAILED, amount, AuthHolder.totkenUserId, 0);
+                Transaction transaction = new Transaction(TransactionType.PAYA, TransactionStatus.FAILED, amount, AUTH_HOLDER.getTotkenUserId(), 0);
 
                 transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
                 transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
@@ -217,13 +222,12 @@ public class MoneyTransactionMenu {
 
                 return;
             } else {
-                //todo watch out for difrence of paya number and account number
                 try {
-
-                    boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount);
+                    double fee = amount * 0.001;
+                    boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(starterAccount.getId(), starterAccount.getBalance() - amount - fee);
                     boolean increasingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(desAccount.getId(), desAccount.getBalance() + amount);
                     if (reducingProcessIsSucess && increasingProcessIsSucess) {
-                        Transaction transaction = new Transaction(TransactionType.PAYA, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
+                        Transaction transaction = new Transaction(TransactionType.PAYA, TransactionStatus.SUCCESSFUL, amount, AUTH_HOLDER.getTotkenUserId(), fee);
 
                         transaction.setSenderAccountNummber(starterAccount.getAccountNummber());
                         transaction.setReceiverAccountNummber(desAccount.getAccountNummber());
@@ -285,32 +289,33 @@ public class MoneyTransactionMenu {
             System.out.println(Message.getFailedMessage("finding Cards "));
             return false;
         }
-        if (startAccount.getBalance() >= amount) {
+
+        double fee = 0;
+        if (!startAccount.getBankName().equals(destAccount.getBankName())) {
+            if (amount < 50) {
+                fee = 0.5;
+            } else {
+                fee = 1;
+                double extraAmount = amount - 50;
+                while (extraAmount > 0) {
+                    fee = fee + 0.1;
+                    extraAmount = extraAmount - 10;
+                }
+            }
+
+        }
+        if (startAccount.getBalance() >= amount+fee) {
             System.out.println("hi");
             System.out.println(" id " + startAccount.getId());
             System.out.println(" des id " + destAccount.getId());
-            double fee = 0;
-            if (!startAccount.getBankName().equals(destAccount.getBankName())) {
-                if (amount < 50) {
-                    fee = 0.5;
-                } else {
-                    fee = 1;
-                    double extraAmount = amount - 50;
-                    while (extraAmount > 0) {
-                        fee = fee + 0.1;
-                        extraAmount = extraAmount - 10;
-                    }
-                }
 
-            }
             boolean reducingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(startAccount.getId(), startAccount.getBalance() - amount - fee);
             boolean increasingProcessIsSucess = ACCOUNT_SERVICE.updateAccountBalance(destAccount.getId(), destAccount.getBalance() + amount);
-            System.out.println("reducingProcessIsSucess" + reducingProcessIsSucess);
-            System.out.println("increasingProcessIsSucess" + increasingProcessIsSucess);
+
             if (reducingProcessIsSucess && increasingProcessIsSucess) {
                 System.out.println(Message.getSuccessfulMessage(amount + " Card Transfer to " + destAccount.getUserFristName()));
                 // add sucessfull Transaction
-                Transaction transaction = new Transaction(TransactionType.NORMAL, TransactionStatus.SUCCESSFUL, amount, AuthHolder.totkenUserId, 0);
+                Transaction transaction = new Transaction(TransactionType.NORMAL, TransactionStatus.SUCCESSFUL, amount, AUTH_HOLDER.getTotkenUserId(), fee);
 
                 transaction.setSenderAccountNummber(startAccount.getAccountNummber());
                 transaction.setReceiverAccountNummber(destAccount.getAccountNummber());
@@ -323,7 +328,7 @@ public class MoneyTransactionMenu {
             } else System.out.println("unable to transfer money");
         } else
             System.out.println("you are low on your Currency!");
-        Transaction transaction = new Transaction(TransactionType.NORMAL, TransactionStatus.FAILED, amount, AuthHolder.totkenUserId, 0);
+        Transaction transaction = new Transaction(TransactionType.NORMAL, TransactionStatus.FAILED, amount, AUTH_HOLDER.getTotkenUserId(), 0);
         transaction.setSenderAccountNummber(startAccount.getAccountNummber());
         transaction.setReceiverAccountNummber(destAccount.getAccountNummber());
         transaction.setSenderId(startAccount.getId());
@@ -342,7 +347,8 @@ public class MoneyTransactionMenu {
             System.out.println(Message.getSuccessfulMessage("Cards found"));
 
             for (int i = 0; i < cards.size(); i++) {
-                System.out.println("Card " + i + 1 + ": ");
+                int number = i + 1;
+                System.out.println("Card " + number + ": ");
                 CreditCard card = cards.get(i);
                 System.out.println("bank name: " + card.getBankName());
                 System.out.println("card name: " + card.getCardName());

@@ -8,7 +8,6 @@ public abstract class BaseEntity {
     }
 
     public Long getId() {
-
         return id;
     }
 }

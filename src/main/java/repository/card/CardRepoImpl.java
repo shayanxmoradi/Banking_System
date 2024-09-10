@@ -10,9 +10,11 @@ import java.util.List;
 
 public class CardRepoImpl implements CardRepo {
     private final Connection connection;
+    private final AuthHolder AUTH_HOLDER;
 
-    public CardRepoImpl(Connection connection) {
+    public CardRepoImpl(Connection connection, AuthHolder authHolder) {
         this.connection = connection;
+        AUTH_HOLDER = authHolder;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class CardRepoImpl implements CardRepo {
             preparedStatement.setString(4, card.getCardName().toLowerCase());
             preparedStatement.setDate(5, Date.valueOf(card.getExpiryDate()));
             preparedStatement.setInt(6, card.getCvv());
-            preparedStatement.setInt(7, AuthHolder.totkenUserId.intValue());
+            preparedStatement.setInt(7, AUTH_HOLDER.getTotkenUserId().intValue());
             preparedStatement.setString(8, card.getBankName());
 
             if (preparedStatement.executeUpdate() > 0) {
@@ -74,7 +76,7 @@ public class CardRepoImpl implements CardRepo {
                                 """;
         PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
         preparedStatement.setString(1, name.toLowerCase());
-        preparedStatement.setInt(2, AuthHolder.totkenUserId.intValue());
+        preparedStatement.setInt(2, AUTH_HOLDER.getTotkenUserId().intValue());
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
             CreditCard card = new CreditCard();
@@ -97,7 +99,7 @@ public class CardRepoImpl implements CardRepo {
                                 """;
         PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
         preparedStatement.setString(1, number.toLowerCase());
-        preparedStatement.setInt(2, AuthHolder.totkenUserId.intValue());
+        preparedStatement.setInt(2, AUTH_HOLDER.getTotkenUserId().intValue());
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
             CreditCard card = new CreditCard();
@@ -122,7 +124,7 @@ public class CardRepoImpl implements CardRepo {
                                 """;
         PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
         preparedStatement.setString(1, bankName.toLowerCase());
-        preparedStatement.setInt(2, AuthHolder.totkenUserId.intValue());
+        preparedStatement.setInt(2, AUTH_HOLDER.getTotkenUserId().intValue());
         ResultSet resultSet = preparedStatement.executeQuery();
         List<CreditCard> cards = new ArrayList<>();
         while (resultSet.next()) {
@@ -152,7 +154,7 @@ public class CardRepoImpl implements CardRepo {
                 where  user_id_fk =?
                                 """;
         PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
-        preparedStatement.setInt(1, AuthHolder.totkenUserId.intValue());
+        preparedStatement.setInt(1, AUTH_HOLDER.getTotkenUserId().intValue());
 
         ResultSet resultSet = preparedStatement.executeQuery();
         List<CreditCard> cards = new ArrayList<>();

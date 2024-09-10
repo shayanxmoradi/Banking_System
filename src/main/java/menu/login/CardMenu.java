@@ -28,13 +28,15 @@ public class CardMenu {
     private final AccountService ACCOUNT_SERVICE;
     private final TransactionService TRANSACTION_SERVICE;
     private final CardService CARD_SERVICE;
+    private final AuthHolder AUTH_HOLDER;
 
-    public CardMenu(Input input, Message message, AccountService accountService, TransactionService transactionService, CardService cardService) {
+    public CardMenu(Input input, Message message, AccountService accountService, TransactionService transactionService, CardService cardService, AuthHolder authHolder) {
         this.INPUT = input;
         this.MESSAGE = message;
         this.ACCOUNT_SERVICE = accountService;
         this.TRANSACTION_SERVICE = transactionService;
         this.CARD_SERVICE = cardService;
+        this.AUTH_HOLDER = authHolder;
     }
 
     public void show() throws SQLException {
@@ -78,7 +80,7 @@ public class CardMenu {
                 }
                 case "7": {
                     System.out.println("Here is a list of all your Transactions:");
-                    System.out.println(TRANSACTION_SERVICE.getTransactionsByUserId(AuthHolder.totkenUserId.intValue()));
+                    System.out.println(TRANSACTION_SERVICE.getTransactionsByUserId(AUTH_HOLDER.getTotkenUserId().intValue()));
                     break;
                 }
                 case "8": {
@@ -94,32 +96,37 @@ public class CardMenu {
 
         System.out.println(MESSAGE.getInputMessage("Your Card name"));
         String cardName = INPUT.scanner.next();
-       Account account =ACCOUNT_SERVICE.getAccountByUserId(AuthHolder.totkenUserId);
-        CreditCard card = new CreditCard(account.getId(), cardName);
-        card.setBankName("sparksasse");
-        if (CARD_SERVICE.addCard(card)) {
-            System.out.println(MESSAGE.getSuccessfulMessage("Creating new Card"));
-            System.out.println("Your created Card Information:");
-            System.out.printf("Card Number: %s%nCCV2: %s%nExpire Date: %s%n",
-                    card.getCardNumber(), card.getCvv(), card.getExpiryDate());
-        } else {
-            System.out.println(MESSAGE.getFailedMessage("Creating new Card"));
+        try {
+            Account account = ACCOUNT_SERVICE.getAccountByUserId(AUTH_HOLDER.getTotkenUserId());
+            CreditCard card = new CreditCard(account.getId(), cardName);
+            card.setBankName("sparksasse");
+            if (CARD_SERVICE.addCard(card)) {
+                System.out.println(MESSAGE.getSuccessfulMessage("Creating new Card"));
+                System.out.println("Your created Card Information:");
+                System.out.printf("Card Number: %s%nCCV2: %s%nExpire Date: %s%n",
+                        card.getCardNumber(), card.getCvv(), card.getExpiryDate());
+            } else {
+                System.out.println(MESSAGE.getFailedMessage("Creating new Card"));
+            }
+        }catch (Exception e){
+            System.out.println("you dont have ACCount");
+
         }
+
     }
 
     private void deleteCard() throws SQLException {
         System.out.println("Which Card do you want to delete?");
         System.out.println(MESSAGE.getInputMessage("Your Card number"));
         String cardNumber = INPUT.scanner.next();
-     try {
+        try {
             CreditCard card = CARD_SERVICE.getCardByNumber(cardNumber);
             if (CARD_SERVICE.removeCard(card)) {
                 System.out.println(MESSAGE.getSuccessfulMessage("Deleting Card"));
             } else {
                 System.out.println(MESSAGE.getFailedMessage("peydakardma vali hazf nakrdamr " + card.getCardNumber()));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(MESSAGE.getFailedMessage("Deleting Card"));
         }
 
@@ -189,7 +196,7 @@ public class CardMenu {
                     break;
 
                 }
-                filteredTransactions = TRANSACTION_SERVICE.getTransactionsByUserIdWithType(AuthHolder.totkenUserId.intValue(), transactionType);
+                filteredTransactions = TRANSACTION_SERVICE.getTransactionsByUserIdWithType(AUTH_HOLDER.getTotkenUserId().intValue(), transactionType);
                 break;
             case 2:
                 try {
@@ -202,7 +209,7 @@ public class CardMenu {
                     String endDate1 = Input.scanner.next();
                     LocalDate endLocalDate = LocalDate.parse(endDate1);
                     Date endDate = Date.from(endLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                    filteredTransactions = TRANSACTION_SERVICE.getTransactionsByUserIdWithInDate(AuthHolder.totkenUserId.intValue(), startDate, endDate);
+                    filteredTransactions = TRANSACTION_SERVICE.getTransactionsByUserIdWithInDate(AUTH_HOLDER.getTotkenUserId().intValue(), startDate, endDate);
                 } catch (Exception e) {
                     System.out.println("invarlid DATE!!");
                 }
@@ -210,7 +217,7 @@ public class CardMenu {
             case 3:
                 System.out.println("Enter amount:");
                 double amount = Input.scanner.nextDouble();
-                filteredTransactions = TRANSACTION_SERVICE.getTransactionsByUserIdWithAmount(AuthHolder.totkenUserId.intValue(), (float) amount);
+                filteredTransactions = TRANSACTION_SERVICE.getTransactionsByUserIdWithAmount(AUTH_HOLDER.getTotkenUserId().intValue(), (float) amount);
                 break;
             default:
                 System.out.println("Invalid choice.");

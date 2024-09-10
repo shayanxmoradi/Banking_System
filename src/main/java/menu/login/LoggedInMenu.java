@@ -34,6 +34,7 @@ public class LoggedInMenu {
                     4 -> Previous Menu
                     """);
 
+
             switch (INPUT.scanner.next()) {
                 case "1": {
                     CARD_MENU.show();

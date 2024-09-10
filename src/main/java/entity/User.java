@@ -8,15 +8,19 @@ public class User extends BaseEntity {
     private String password;
     private String firstName;
     private String lastName;
-   // private List<Long > idOfUserAccounts= new ArrayList<>();
 
     public User( String username, String password) {
         this.username = username;
         this.password = password;
 
     }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public String getFirstName() {
         return firstName;

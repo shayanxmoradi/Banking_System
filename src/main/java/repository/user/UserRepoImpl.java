@@ -15,11 +15,13 @@ public class UserRepoImpl implements UserRepo {
     }
 
     public User addUser(User user) throws SQLException {
-        String insertQuery = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String insertQuery = "INSERT INTO users (username, password,first_name,last_name) VALUES (?, ?,?,?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getFirstName());
+            preparedStatement.setString(4, user.getLastName());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -52,11 +54,14 @@ public class UserRepoImpl implements UserRepo {
         preparedStatement.setString(1, username);
         preparedStatement.setString(2, password);
 
+
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
             user = new User(resultSet.getString("username"),
                     resultSet.getString("password"));
             user.setId((long) resultSet.getInt("id"));
+            user.setFirstName(resultSet.getString("first_name"));
+            user.setLastName(resultSet.getString("last_name"));
 
         }
         resultSet.close();

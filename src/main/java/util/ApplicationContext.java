@@ -35,25 +35,24 @@ public class ApplicationContext {
 
 
     private ApplicationContext() {
-        // do here
         Input input = new Input();
         Message message = new Message();
         Connection connection = DataSource.getConnection();
 
         UserRepo userRepo = new UserRepoImpl(connection);
         AuthHolder authHolder = new AuthHolder();
-        AccountRepo accountRepo = new AccountRepoImpl(connection);
-        CardRepo cardRepo = new CardRepoImpl(connection);
+        AccountRepo accountRepo = new AccountRepoImpl(connection, authHolder);
+        CardRepo cardRepo = new CardRepoImpl(connection,authHolder);
         TransactionRepo transactionRepo = new TransactionRepoImp(connection);
 
 
         AccountService accountService = new AccountServiceImpl(accountRepo);
         CardService cardService = new CardServiceImpl(cardRepo);
-        UserService userService = new UserServiceImpl(userRepo, accountService);
+        UserService userService = new UserServiceImpl(userRepo, accountService,authHolder);
         TransactionService transactionService = new TransactionServiceImpl(transactionRepo);
         SignUpMenu signUpMenu = new SignUpMenu(input, message, userService);
-        CardMenu cardMenu = new CardMenu(input, message, accountService, transactionService, cardService);
-        MoneyTransactionMenu moneyTransactionMenu = new MoneyTransactionMenu(input, message, accountService, transactionService, cardService);
+        CardMenu cardMenu = new CardMenu(input, message, accountService, transactionService, cardService,authHolder);
+        MoneyTransactionMenu moneyTransactionMenu = new MoneyTransactionMenu(input, message, accountService, transactionService, cardService,authHolder);
         AccountMenu accountMenu = new AccountMenu(input, message, userService);
 
         LoggedInMenu loggedInMenu = new LoggedInMenu(input, message, cardMenu, moneyTransactionMenu, accountMenu);

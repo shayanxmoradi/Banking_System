@@ -16,7 +16,7 @@ public  class Transaction extends BaseEntity {
     private Long senderUserId;
     private LocalTime transactionTime;
     private LocalDate transactionDate;
-    private double transactionFee;
+    private Double transactionFee;
     private String senderAccountNummber;
     private String receiverAccountNummber;
     private Long senderId;

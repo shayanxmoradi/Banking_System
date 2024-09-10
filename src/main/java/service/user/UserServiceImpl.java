@@ -11,12 +11,14 @@ import java.sql.SQLException;
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepoImpl;
     private final AccountService accountService;
+    private final AuthHolder AUTH_HOLDER;
 
 
 
-    public UserServiceImpl(UserRepo userRepoImpl, AccountService accountService) {
+    public UserServiceImpl(UserRepo userRepoImpl, AccountService accountService, AuthHolder authHolder) {
         this.userRepoImpl = userRepoImpl;
         this.accountService = accountService;
+        this.AUTH_HOLDER = authHolder;
     }
 
 
@@ -24,8 +26,8 @@ public class UserServiceImpl implements UserService {
     public boolean login(String username, String password) throws SQLException {
         User user = userRepoImpl.findByUsernamePassword(username, password);
         if (user != null) {
-            AuthHolder.totkenUserId = user.getId();
-            AuthHolder.tokenUsername = user.getUsername();
+            AUTH_HOLDER.setTotkenUserId( user.getId());
+            AUTH_HOLDER.setTokenUsername( user.getUsername());
             return true;
         }
 

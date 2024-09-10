@@ -9,6 +9,5 @@ public class Bank extends BaseEntity {
 
         this.name = name;
         this.address = address;
-
     }
 }
